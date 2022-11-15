@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -31,15 +32,19 @@ public class Person {
     @Column(name = "middle_name", nullable = false)
     private String middleName;
 
-    @Column(name = "branch", nullable = false)
-    private String branch;
+    @Column(name = "branch_name", nullable = false)
+    private String branchName;
 
-    public Person(String post, String name, String surName, String middleName, String branch) {
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id")
+    private List<Task> tasks;
+
+    public Person(String post, String name, String surName, String middleName, String branchName) {
         this.post = post;
         this.name = name;
         this.surName = surName;
         this.middleName = middleName;
-        this.branch = branch;
+        this.branchName = branchName;
     }
 
     @Override
