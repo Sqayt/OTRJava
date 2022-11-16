@@ -24,6 +24,15 @@ public class Task {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    })
+    @JoinColumn(name = "person_id")
+    private Person person;
+
     public Task(int priority, String description) {
         this.priority = priority;
         this.description = description;
@@ -34,11 +43,11 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id != null && priority == task.priority && Objects.equals(id, task.id) && Objects.equals(description, task.description);
+        return priority == task.priority && Objects.equals(id, task.id) && Objects.equals(description, task.description) && Objects.equals(person, task.person);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id, priority, description, person);
     }
 }
