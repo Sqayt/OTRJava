@@ -28,7 +28,7 @@ public class Task {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.PERSIST,
-            CascadeType.REFRESH
+            CascadeType.REFRESH,
     })
     @JoinColumn(name = "person_id")
     private Person person;

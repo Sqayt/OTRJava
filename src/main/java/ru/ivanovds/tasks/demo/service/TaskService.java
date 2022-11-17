@@ -37,6 +37,15 @@ public class TaskService {
         }
     }
 
+//    public boolean deleteTaskByPerson(Task task, Person person) {
+//        try {
+//            task.
+//
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
+
     public boolean deleteTaskById(Long id) {
         try {
             Task task = taskRepository.findById(id).orElseThrow();

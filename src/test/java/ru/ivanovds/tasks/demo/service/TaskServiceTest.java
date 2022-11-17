@@ -18,6 +18,7 @@ public class TaskServiceTest {
     @Autowired
     PersonService personService;
 
+    //TODO не работает
     @Test
     public void saveTaskByPersonTest() {
         Task task = new Task(17,"It is test case");
@@ -28,6 +29,13 @@ public class TaskServiceTest {
 
         List<Task> taskNew = taskService.getAllTask();
         Assertions.assertNotEquals(taskNew.size(), tasks.size());
+    }
+
+    /
+    @Test
+    public void deleteTaskByPerson() {
+        Task task
+
     }
 
     @Test

@@ -77,9 +77,9 @@ public class PersonService {
         }
     }
 
-    public boolean saveTaskByPerson(Person person, Task task) {
+    public boolean addTaskByPerson(Person person, Task task) {
         try {
-            person.setTasks(List.of(task));
+            person.addTask(task);
             personRepository.save(person);
 
             return true;
@@ -88,12 +88,9 @@ public class PersonService {
         }
     }
 
-    //TODO не работает
-    public boolean deleteTaskByPerson(Person person, Task task) {
+    public boolean delTaskByPerson(Person person, Task task) {
         try {
-            List<Task> tasks = person.getTasks();
-            tasks.remove(task);
-            person.setTasks(tasks);
+            person.delTask(task);
 
             personRepository.save(person);
 
@@ -103,7 +100,7 @@ public class PersonService {
         }
     }
 
-    public boolean deleteAllPerson() {
+    public boolean delAllPerson() {
         try {
             personRepository.deleteAll();
 

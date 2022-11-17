@@ -64,36 +64,39 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void saveTaskByPersonTest() {
-        Task task = new Task(10, "Починить самолет");
-        Person person = personService.getPersonById(1L).orElse(new Person());
-        personService.saveTaskByPerson(person, task);
-
-        Task taskNew = taskService.getTaskById(4L).orElse(new Task());
-
-
-        Assertions.assertEquals(task.getDescription(), taskNew.getDescription());
-    }
-
-    @Test
-    public void deleteTaskByPersonTest() {
-        Task task = taskService.getTaskById(1L).orElse(new Task());
-        Person person = personService.getPersonById(1L).orElse(new Person());
-        List<Task> tasksOld = person.getTasks();
-        taskService.deleteTaskById(task.getId());
-        personService.deleteTaskByPerson(person, task);
-
-        Person personNew = personService.getPersonById(1L).orElse(new Person());
-        List<Task> tasks = personNew.getTasks();
-
-        Assertions.assertNotEquals(tasksOld.size(), tasks.size());
-    }
-
-    @Test
     public void getAllTaskByPersonTest() {
         Person person = personService.getPersonById(1L).orElse(new Person());
         List<Task> tasks = personService.getAllTaskByPerson(person);
 
         Assertions.assertEquals(tasks.size(), 2);
+    }
+
+    @Test
+    public void addTaskByPersonTest() {
+        Person person = personService.getPersonById(1L).orElseThrow();
+        Task task = new Task(18, "Это Тест");
+        personService.addTaskByPerson(person, task);
+        Person personNew = personService.getPersonById(1L).orElseThrow();
+        List<Task> tasks = personNew.getTasks();
+
+        Assertions.assertNotEquals(tasks.size(), 2);
+    }
+
+    @Test
+    public void delTaskByPersonTest() {
+        Person person = personService.getPersonById(1L).orElseThrow();
+        List<Task> tasks = person.getTasks();
+        Task task = person.getTasks().get(0);
+        personService.delTaskByPerson(person, task);
+
+        Assertions.assertEquals(tasks.size(), 1);
+    }
+
+    @Test
+    public void delAllPersons() {
+        personService.delAllPerson();
+        List<Person> people = personService.getAllPerson();
+
+        Assertions.assertEquals(people.size(), 0);
     }
 }

@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,8 +40,27 @@ public class Person {
     @Column(name = "director_id")
     private Long directorId;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "person")
-    private List<Task> tasks;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "person", orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
+    public void addTask(Task task) {
+        this.tasks.add(task);
+        task.setPerson(this);
+    }
+
+    public void delTask(Task task) {
+        this.tasks.remove(task);
+        task.setPerson(null);
+    }
+
+    public Person(String post, String name, String surName, String middleName, String branchName, Long directorId, List<Task> tasks) {
+        this.post = post;
+        this.name = name;
+        this.surName = surName;
+        this.middleName = middleName;
+        this.branchName = branchName;
+        this.directorId = directorId;
+        this.tasks = tasks;
+    }
 
     public Person(String post, String name, String surName, String middleName, String branchName, List<Task> tasks) {
         this.post = post;

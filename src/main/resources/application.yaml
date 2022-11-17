@@ -22,4 +22,5 @@ logging:
   level:
     org:
       hibernate:
+        type: TRACE
         SQL: INFO
