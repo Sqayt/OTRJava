@@ -1,15 +1,19 @@
 package ru.ivanovds.tasks.demo.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.ivanovds.tasks.demo.entity.Person;
+import ru.ivanovds.tasks.demo.entity.Task;
 import ru.ivanovds.tasks.demo.repository.PersonRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PersonService {
 
     private final PersonRepository personRepository;
@@ -19,11 +23,27 @@ public class PersonService {
     }
 
     public Optional<Person> getPersonById(Long id) {
-//        Person person = personRepository.findById(id)
-//                .orElse()
-
-
         return personRepository.findById(id);
+    }
+
+    public List<Task> getAllTaskByPerson(Person person) {
+        try {
+            Person personNew = personRepository.findById(person.getId()).orElse(new Person());
+
+            return personNew.getTasks();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public boolean savePerson(Person person) {
+        try {
+            personRepository.save(person);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean deletePersonById(Long id) {
@@ -57,8 +77,24 @@ public class PersonService {
         }
     }
 
-    public boolean savePerson(Person person) {
+    public boolean saveTaskByPerson(Person person, Task task) {
         try {
+            person.setTasks(List.of(task));
+            personRepository.save(person);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    //TODO не работает
+    public boolean deleteTaskByPerson(Person person, Task task) {
+        try {
+            List<Task> tasks = person.getTasks();
+            tasks.remove(task);
+            person.setTasks(tasks);
+
             personRepository.save(person);
 
             return true;

@@ -1,18 +1,18 @@
 package ru.ivanovds.tasks.demo.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.ivanovds.tasks.demo.entity.Person;
 import ru.ivanovds.tasks.demo.entity.Task;
-import ru.ivanovds.tasks.demo.repository.PersonRepository;
 import ru.ivanovds.tasks.demo.repository.TaskRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TaskService {
 
     private final TaskRepository taskRepository;
@@ -25,9 +25,16 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public List<Task> getAllTaskByPerson(Long id) {
+    // TODO не работает
+    public boolean saveTaskByPerson(Task task, Person person) {
+        try {
+            task.setPerson(person);
+            taskRepository.save(task);
 
-        return new ArrayList<>();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean deleteTaskById(Long id) {

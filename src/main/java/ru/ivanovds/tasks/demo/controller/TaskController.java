@@ -41,22 +41,6 @@ public class TaskController {
         }
     }
 
-    // TODO доделать
-    @GetMapping("/person/{id}")
-    public ResponseEntity<?> getAllTaskByPersonId(@PathVariable Long id) {
-        try {
-            List<Task> tasksByPerson = service.getAllTaskByPerson(id);
-            return new ResponseEntity<>(tasksByPerson, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PostMapping
-    public ResponseEntity<HttpStatus> saveTask() {
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTaskById(@PathVariable Long id) {
         if (service.deleteTaskById(id)) {
@@ -73,6 +57,15 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<HttpStatus> deleteAllTask() {
+        if (service.deleteAllTask()) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else  {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 }

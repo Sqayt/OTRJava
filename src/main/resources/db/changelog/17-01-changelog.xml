@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1668660103192-1" author="d.ivanov (generated)">
+        <createTable tableName="person">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_person"/>
+            </column>
+            <column name="post" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sur_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middle_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="branch_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="director_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1668660103192-2" author="d.ivanov (generated)">
+        <createTable tableName="task">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task"/>
+            </column>
+            <column name="priority" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="person_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1668660103192-3" author="d.ivanov (generated)">
+        <addUniqueConstraint columnNames="id" constraintName="uc_person_id" tableName="person"/>
+    </changeSet>
+    <changeSet id="1668660103192-4" author="d.ivanov (generated)">
+        <addUniqueConstraint columnNames="id" constraintName="uc_task_id" tableName="task"/>
+    </changeSet>
+    <changeSet id="1668660103192-5" author="d.ivanov (generated)">
+        <addForeignKeyConstraint baseColumnNames="person_id" baseTableName="task" constraintName="FK_TASK_ON_PERSON"
+                                 referencedColumnNames="id" referencedTableName="person"/>
+    </changeSet>
+    <changeSet id="1668660103192-6" author="d.ivanov (generated)">
+        <dropForeignKeyConstraint baseTableName="drivers" constraintName="drivers_fk_drivers_person_fkey"/>
+    </changeSet>
+    <changeSet id="1668660103192-7" author="d.ivanov (generated)">
+        <dropTable cascadeConstraints="true" tableName="cars"/>
+    </changeSet>
+    <changeSet id="1668660103192-8" author="d.ivanov (generated)">
+        <dropTable cascadeConstraints="true" tableName="drivers"/>
+    </changeSet>
+    <changeSet id="1668660103192-9" author="d.ivanov (generated)">
+        <dropTable cascadeConstraints="true" tableName="persons"/>
+    </changeSet>
+    <changeSet id="1668660103192-10" author="d.ivanov (generated)">
+        <dropSequence sequenceName="car_seq"/>
+    </changeSet>
+
+</databaseChangeLog>

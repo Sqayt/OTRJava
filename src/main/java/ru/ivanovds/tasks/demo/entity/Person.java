@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,7 +39,7 @@ public class Person {
     @Column(name = "director_id")
     private Long directorId;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "person")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "person")
     private List<Task> tasks;
 
     public Person(String post, String name, String surName, String middleName, String branchName, List<Task> tasks) {
