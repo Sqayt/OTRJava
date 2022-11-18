@@ -17,14 +17,6 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
-    public Optional<Task> getTaskById(Long id) {
-        return taskRepository.findById(id);
-    }
-
-    public List<Task> getAllTask() {
-        return taskRepository.findAll();
-    }
-
     // TODO не работает
     public boolean saveTaskByPerson(Task task, Person person) {
         try {
@@ -37,24 +29,16 @@ public class TaskService {
         }
     }
 
-//    public boolean deleteTaskByPerson(Task task, Person person) {
-//        try {
-//            task.
-//
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
+    public Optional<Task> getTaskById(Long id) {
+        return taskRepository.findById(id);
+    }
 
-    public boolean deleteTaskById(Long id) {
-        try {
-            Task task = taskRepository.findById(id).orElseThrow();
-            taskRepository.delete(task);
+    public List<Task> getAllTaskByPerson(Person person) {
+        return person.getTasks();
+    }
 
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public List<Task> getAllTask() {
+        return taskRepository.findAll();
     }
 
     public boolean updateTaskById(Long id, Task task) {
@@ -65,6 +49,17 @@ public class TaskService {
             taskOld.setPriority(task.getPriority());
 
             taskRepository.save(taskOld);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean deleteTaskById(Long id) {
+        try {
+            Task task = taskRepository.findById(id).orElseThrow();
+            taskRepository.delete(task);
 
             return true;
         } catch (Exception e) {

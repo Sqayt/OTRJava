@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-relationships
+      author: SqGoliaf
+      changes:
+        - addUniqueConstraint:
+            columnNames: id
+            constraintName: uc_person_id
+            tableName: person
+        - addUniqueConstraint:
+            columnNames: id
+            constraintName: uc_task_id
+            tableName: task
+        - addForeignKeyConstraint:
+            baseColumnNames: person_id
+            baseTableName: task
+            constraintName: FK_TASK_ON_PERSON
+            referencedColumnNames: id
+            referencedTableName: person
+

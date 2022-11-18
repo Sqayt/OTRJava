@@ -20,22 +20,23 @@ public class TaskServiceTest {
 
     //TODO не работает
     @Test
-    public void saveTaskByPersonTest() {
+    public void createTaskByNewPersonTest() {
         Task task = new Task(17,"It is test case");
-        Person person = personService.getPersonById(1L).orElse(new Person());
+        Person person = new Person("Начальник", "Михаил", "Задорнов", "Сергеевич", "ОАО");
         List<Task> tasks = taskService.getAllTask();
 
         taskService.saveTaskByPerson(task, person);
+        List<Task> tasksNew = taskService.getAllTask();
 
-        List<Task> taskNew = taskService.getAllTask();
-        Assertions.assertNotEquals(taskNew.size(), tasks.size());
+        Assertions.assertNotEquals(tasksNew.size(), tasks.size());
     }
 
-    /
     @Test
-    public void deleteTaskByPerson() {
-        Task task
+    public void getAllTaskByPersonTest() {
+        Person person = personService.getPersonById(1L).orElseThrow();
+        List<Task> tasks = taskService.getAllTaskByPerson(person);
 
+        Assertions.assertEquals(2, tasks.size());
     }
 
     @Test

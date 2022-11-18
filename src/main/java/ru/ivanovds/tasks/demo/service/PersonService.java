@@ -18,8 +18,16 @@ public class PersonService {
 
     private final PersonRepository personRepository;
 
-    public List<Person> getAllPerson() {
-        return personRepository.findAll();
+    public boolean savePerson(Person person) {
+        try {
+            personRepository.save(person);
+
+            return true;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            return false;
+        }
     }
 
     public Optional<Person> getPersonById(Long id) {
@@ -28,31 +36,27 @@ public class PersonService {
 
     public List<Task> getAllTaskByPerson(Person person) {
         try {
-            Person personNew = personRepository.findById(person.getId()).orElse(new Person());
-
-            return personNew.getTasks();
+            return person.getTasks();
         } catch (Exception e) {
+            log.error(e.getMessage());
+
             return new ArrayList<>();
         }
     }
 
-    public boolean savePerson(Person person) {
+    public List<Person> getAllPerson() {
+        return personRepository.findAll();
+    }
+
+    public boolean addTaskByPerson(Person person, Task task) {
         try {
+            person.addTask(task);
             personRepository.save(person);
 
             return true;
         } catch (Exception e) {
-            return false;
-        }
-    }
+            log.error(e.getMessage());
 
-    public boolean deletePersonById(Long id) {
-        try {
-            Person person = personRepository.findById(id).orElseThrow();
-            personRepository.delete(person);
-
-            return true;
-        } catch (Exception e) {
             return false;
         }
     }
@@ -77,17 +81,6 @@ public class PersonService {
         }
     }
 
-    public boolean addTaskByPerson(Person person, Task task) {
-        try {
-            person.addTask(task);
-            personRepository.save(person);
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     public boolean delTaskByPerson(Person person, Task task) {
         try {
             person.delTask(task);
@@ -103,6 +96,17 @@ public class PersonService {
     public boolean delAllPerson() {
         try {
             personRepository.deleteAll();
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean deletePersonById(Long id) {
+        try {
+            Person person = personRepository.findById(id).orElseThrow();
+            personRepository.delete(person);
 
             return true;
         } catch (Exception e) {

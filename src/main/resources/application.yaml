@@ -4,6 +4,9 @@ server:
     context-path: /tasks
 
 spring:
+  liquibase:
+    enabled: true
+    liquibase-schema: public
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/postgres
@@ -15,8 +18,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL10Dialect
         hbm2ddl:
-          auto: create
-        default_schema: otk
+          auto: none
+        default_schema: public
 
 logging:
   level:

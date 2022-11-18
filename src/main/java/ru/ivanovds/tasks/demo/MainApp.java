@@ -17,7 +17,6 @@ import java.util.List;
 public class MainApp implements CommandLineRunner {
 
 	private final PersonService personService;
-	private final TaskService taskService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MainApp.class, args);
@@ -25,20 +24,20 @@ public class MainApp implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Person michail = new Person("Начальник", "Михаил", "Задорнов", "Сергеевич", "ОАО");
-		Person sacha = new Person("Работник", "Александр", "Жуйков", "Сергеевич", "Кипр");
-		Person lisa = new Person("Бухгалтер", "Елизавета", "Казакова", "Владимирована", "Дубай");
-
-		Task cleanTerritory = new Task(1,"Убрать территорию");
-		Task createRocket = new Task(29, "Построить ракету");
-		Task flyOnPlane = new Task(2,"Полетать на самолете");
-
-		michail.setTasks(List.of(createRocket, flyOnPlane));
-		lisa.setTasks(List.of(cleanTerritory));
-
-		List<Person> people = List.of(michail, sacha, lisa);
-		people.forEach(personService::savePerson);
-
-		personService.savePerson(sacha);
+//		Person michail = new Person("Начальник", "Михаил", "Задорнов", "Сергеевич", "ОАО");
+//		Person sacha = new Person("Работник", "Александр", "Жуйков", "Сергеевич", "Кипр");
+//		Person lisa = new Person("Бухгалтер", "Елизавета", "Казакова", "Владимирована", "Дубай");
+//
+//		Task cleanTerritory = new Task(1,"Убрать территорию");
+//		Task createRocket = new Task(29, "Построить ракету");
+//		Task flyOnPlane = new Task(2,"Полетать на самолете");
+//
+//		michail.setTasks(List.of(createRocket, flyOnPlane));
+//		lisa.setTasks(List.of(cleanTerritory));
+//
+//		List<Person> people = List.of(michail, sacha, lisa);
+//		people.forEach(personService::savePerson);
+//
+//		personService.savePerson(sacha);
 	}
 }
