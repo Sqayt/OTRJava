@@ -1,0 +1,41 @@
+body {
+    font-family: Helvetica;
+    margin: 0;
+}
+a {
+    text-decoration: none;
+    color: #000;
+}
+.site-header {
+    border-bottom: 1px solid #ccc;
+    padding: 2em 5em;
+    display: flex;
+    justify-content: space-between;
+    background: beige;
+}
+
+.tabs {
+    font-size: 0;
+}
+
+.tabs>input[type="radio"] {
+    display: none;
+}
+
+.main {
+    padding: 10px 10px 10px
+}
+
+.Tabs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 10%;
+}
+
+.tabsList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
