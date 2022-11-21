@@ -1,5 +1,6 @@
 package ru.ivanovds.tasks.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class Task {
             CascadeType.REFRESH,
     })
     @JoinColumn(name = "person_id")
+    @JsonIgnore
     private Person person;
 
     public Task(int priority, String description) {

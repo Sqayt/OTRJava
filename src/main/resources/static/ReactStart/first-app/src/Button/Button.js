@@ -1,9 +1,14 @@
-
 function ButtonAddPerson() {
     return (
-        <button>
-            Добавить сотрудника
-        </button>
+        <div className="ButtonAddPerson"
+             style={{
+                 textAlign:"right",
+                 margin: "25px 50px"
+            }}>
+            <button style={{width: '20%'}}>
+                <h2>Добавить сотрудника </h2>
+            </button>
+        </div>
     )
 }
 

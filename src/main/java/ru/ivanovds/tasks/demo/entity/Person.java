@@ -1,5 +1,6 @@
 package ru.ivanovds.tasks.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -41,7 +42,9 @@ public class Person {
     private Long directorId;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "person", orphanRemoval = true)
+    @JsonIgnore
     private List<Task> tasks = new ArrayList<>();
+
     public void addTask(Task task) {
         this.tasks.add(task);
         task.setPerson(this);
