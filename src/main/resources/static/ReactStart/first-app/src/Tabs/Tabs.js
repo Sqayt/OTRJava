@@ -1,27 +1,27 @@
-import React from 'react';
-import Tab from "@material-ui/core/Tab";
-import {Paper} from "@mui/material";
+import React, {useState} from 'react';
+// import 'Tabs.css';
 
-const Tabs = () => {
-    const [value, setValue] = React.useState(2);
+function Tabs() {
+    const[index, setIndex] = useState(0);
 
     return (
-        <div style={{marginLeft:"40%"}}>
-            <Paper square>
-                <Tabs
-                    value={value}
-                    textColor="primary"
-                    indicatorColor="primary"
-                    onChange={(event, newValue) => {
-                        setValue(newValue);
-                    }}
-                >
-                    <Tab label="Active TAB One" />
-                    <Tab label="Active TAB Two" />
-                    <Tab label="Disabled TAB!" disabled />
-                    <Tab label="Active Tab Three" />
-                </Tabs>
-            </Paper>
+        <div className="Tabs">
+            <div className="TabsList" >
+                <row className="tabHead" onClick={() => setIndex(0)}>
+                    Tab1
+                </row>
+                <row className="tabHead" onClick={() => setIndex(1)}>
+                    Tab2
+                </row>
+            </div>
+            <div className="tabContact" hidden={index !== 0}>
+                This is First tab content.
+            </div>
+            <div className="tabContact" hidden={index !== 1}>
+                This is Second tab content.
+            </div>
         </div>
     )
 }
+
+export default Tabs
