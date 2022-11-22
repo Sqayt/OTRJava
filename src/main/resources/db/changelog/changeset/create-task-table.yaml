@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-task
+      id: create-task1
       author: SqGoliaf
       changes:
         - createTable:

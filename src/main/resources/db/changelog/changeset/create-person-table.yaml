@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-person
+      id: create-person1
       author: SqGoliaf
       changes:
         - createTable:
@@ -39,7 +39,6 @@ databaseChangeLog:
                   name: branch_name
                   type: VARCHAR(255)
               - column:
-                  name: director_id
-                  type: BIGINT
+                  name: director_full_name
+                  type: VARCHAR(255)
             tableName: person
-

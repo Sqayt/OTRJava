@@ -71,7 +71,7 @@ public class PersonService {
             personOld.setSurName(person.getSurName());
             personOld.setMiddleName(person.getMiddleName());
             personOld.setPost(person.getPost());
-            personOld.setDirectorId(person.getDirectorId());
+            personOld.setDirectorFullName(person.getDirectorFullName());
 
             personRepository.save(personOld);
 

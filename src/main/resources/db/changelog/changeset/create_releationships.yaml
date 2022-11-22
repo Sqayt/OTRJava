@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-relationships
+      id: create-relationships1
       author: SqGoliaf
       changes:
         - addUniqueConstraint:

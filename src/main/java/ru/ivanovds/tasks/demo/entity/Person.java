@@ -38,8 +38,8 @@ public class Person {
     @Column(name = "branch_name", nullable = false)
     private String branchName;
 
-    @Column(name = "director_id")
-    private Long directorId;
+    @Column(name = "director_full_name")
+    private String directorFullName;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "person", orphanRemoval = true)
     @JsonIgnore
@@ -55,13 +55,13 @@ public class Person {
         task.setPerson(null);
     }
 
-    public Person(String post, String name, String surName, String middleName, String branchName, Long directorId, List<Task> tasks) {
+    public Person(String post, String name, String surName, String middleName, String branchName, String directorFullName, List<Task> tasks) {
         this.post = post;
         this.name = name;
         this.surName = surName;
         this.middleName = middleName;
         this.branchName = branchName;
-        this.directorId = directorId;
+        this.directorFullName = directorFullName;
         this.tasks = tasks;
     }
 
@@ -74,13 +74,13 @@ public class Person {
         this.tasks = tasks;
     }
 
-    public Person(String post, String name, String surName, String middleName, String branchName, Long directorId) {
+    public Person(String post, String name, String surName, String middleName, String branchName, String directorFullName) {
         this.post = post;
         this.name = name;
         this.surName = surName;
         this.middleName = middleName;
         this.branchName = branchName;
-        this.directorId = directorId;
+        this.directorFullName = directorFullName;
     }
 
     public Person(String post, String name, String surName, String middleName, String branchName) {
@@ -104,11 +104,11 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return Objects.equals(id, person.id) && Objects.equals(post, person.post) && Objects.equals(name, person.name) && Objects.equals(surName, person.surName) && Objects.equals(middleName, person.middleName) && Objects.equals(branchName, person.branchName) && Objects.equals(directorId, person.directorId) && Objects.equals(tasks, person.tasks);
+        return Objects.equals(id, person.id) && Objects.equals(post, person.post) && Objects.equals(name, person.name) && Objects.equals(surName, person.surName) && Objects.equals(middleName, person.middleName) && Objects.equals(branchName, person.branchName) && Objects.equals(directorFullName, person.directorFullName) && Objects.equals(tasks, person.tasks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, post, name, surName, middleName, branchName, directorId, tasks);
+        return Objects.hash(id, post, name, surName, middleName, branchName, directorFullName, tasks);
     }
 }
