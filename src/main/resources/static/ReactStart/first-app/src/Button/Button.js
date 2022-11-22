@@ -1,11 +1,9 @@
+import './Button.css'
+
 function ButtonAddPerson() {
     return (
-        <div className="ButtonAddPerson"
-             style={{
-                 textAlign:"right",
-                 margin: "25px 50px"
-            }}>
-            <button style={{width: '20%'}}>
+        <div className="btnPosition">
+            <button className="btnAddPerson">
                 <h2>Добавить сотрудника </h2>
             </button>
         </div>
