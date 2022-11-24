@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.ivanovds.tasks.demo.dto.TaskDto;
+import ru.ivanovds.tasks.demo.entity.Person;
 import ru.ivanovds.tasks.demo.entity.Task;
 import ru.ivanovds.tasks.demo.service.TaskService;
 
@@ -18,13 +20,29 @@ public class TaskController {
 
     private final TaskService service;
 
+    //TODO Еще протестить
+    @PostMapping("/{id}")
+    public ResponseEntity<?> saveTaskByPerson(@RequestBody Person person,
+                                              @RequestBody TaskDto taskDto) {
+        if (service.saveTaskByPerson(person, taskDto)) {
+
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } else {
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getTaskById(@PathVariable Long id) {
         try {
-            Task task = service.getTaskById(id).orElseThrow();
+            TaskDto taskDto = service.getTaskById(id);
 
-            return new ResponseEntity<>(task, HttpStatus.OK);
+            return new ResponseEntity<>(taskDto, HttpStatus.OK);
         } catch (Exception e) {
+
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -33,7 +51,7 @@ public class TaskController {
     @GetMapping()
     public ResponseEntity<?> getAllTask() {
         try {
-            List<Task> tasks = service.getAllTask();
+            List<TaskDto> tasks = service.getAllTask();
 
             return new ResponseEntity<>(tasks, HttpStatus.OK);
         } catch (Exception e) {
@@ -52,8 +70,8 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> updateTaskById(@PathVariable Long id,
-                                            @RequestBody Task task) {
-        if (service.updateTaskById(id, task)) {
+                                            @RequestBody TaskDto taskDto) {
+        if (service.updateTaskById(id, taskDto)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

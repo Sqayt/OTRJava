@@ -1,5 +1,6 @@
 package ru.ivanovds.tasks.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class Task {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @JsonBackReference
     @ManyToOne(cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
@@ -32,7 +34,6 @@ public class Task {
             CascadeType.REFRESH,
     })
     @JoinColumn(name = "person_id")
-    @JsonIgnore
     private Person person;
 
     public Task(int priority, String description) {

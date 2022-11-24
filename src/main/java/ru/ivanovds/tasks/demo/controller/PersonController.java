@@ -18,6 +18,15 @@ public class PersonController {
 
     private final PersonService personService;
 
+    @PostMapping
+    public ResponseEntity<HttpStatus> savePerson(@RequestBody Person person) {
+        if (personService.savePerson(person)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
     @GetMapping()
     public ResponseEntity<?> getAllPerson() {
         try {
@@ -30,6 +39,7 @@ public class PersonController {
             }
         } catch (Exception e) {
             log.error(e.getMessage());
+
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
     }
@@ -37,22 +47,14 @@ public class PersonController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getPersonById(@PathVariable Long id) {
         try {
-            Person person = personService.getPersonById(id).orElseThrow();
+            Person person = personService.getPersonById(id);
 
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
+
             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
-    }
-
-    @PostMapping
-    public ResponseEntity<HttpStatus> savePerson(@RequestBody Person person) {
-         if (personService.savePerson(person)) {
-             return new ResponseEntity<>(HttpStatus.OK);
-         } else {
-             return new ResponseEntity<>(HttpStatus.CONFLICT);
-         }
     }
 
     @DeleteMapping("/{id}")

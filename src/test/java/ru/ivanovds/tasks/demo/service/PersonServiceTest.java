@@ -29,7 +29,7 @@ public class PersonServiceTest {
 
     @Test
     public void getPersonByIdTest() {
-        Person person = personService.getPersonById(1L).orElse(new Person());
+        Person person = personService.getPersonById(1L);
         Person personOld = new Person("Начальник", "Михаил", "Задорнов", "Сергеевич", "ОАО");
 
         Assertions.assertEquals(person.getName(), personOld.getName());
@@ -40,7 +40,7 @@ public class PersonServiceTest {
     public void savePersonTest() {
         Person person = new Person("Начальник", "Михаил", "Иванов", "Сергеевич", "ОАО");
         personService.savePerson(person);
-        Person personNew = personService.getPersonById(4L).orElse(new Person());
+        Person personNew = personService.getPersonById(4L);
 
         Assertions.assertEquals(person.getName(), personNew.getName());
     }
@@ -58,14 +58,14 @@ public class PersonServiceTest {
     public void updatePersonByIdTest() {
         Person personNew = new Person("Начальник", "Сергей", "Задорнов", "Сергеевич", "ОАО");
         personService.updatePersonById(1L, personNew);
-        Person person = personService.getPersonById(1L).orElse(new Person());
+        Person person = personService.getPersonById(1L);
 
         Assertions.assertEquals(person.getName(), personNew.getName());
     }
 
     @Test
     public void getAllTaskByPersonTest() {
-        Person person = personService.getPersonById(1L).orElse(new Person());
+        Person person = personService.getPersonById(1L);
         List<Task> tasks = personService.getAllTaskByPerson(person);
 
         Assertions.assertEquals(tasks.size(), 2);
@@ -73,10 +73,10 @@ public class PersonServiceTest {
 
     @Test
     public void addTaskByPersonTest() {
-        Person person = personService.getPersonById(1L).orElseThrow();
+        Person person = personService.getPersonById(1L);
         Task task = new Task(18, "Это Тест");
         personService.addTaskByPerson(person, task);
-        Person personNew = personService.getPersonById(1L).orElseThrow();
+        Person personNew = personService.getPersonById(1L);
         List<Task> tasks = personNew.getTasks();
 
         Assertions.assertNotEquals(tasks.size(), 2);
@@ -84,7 +84,7 @@ public class PersonServiceTest {
 
     @Test
     public void delTaskByPersonTest() {
-        Person person = personService.getPersonById(1L).orElseThrow();
+        Person person = personService.getPersonById(1L);
         List<Task> tasks = person.getTasks();
         Task task = person.getTasks().get(0);
         personService.delTaskByPerson(person, task);

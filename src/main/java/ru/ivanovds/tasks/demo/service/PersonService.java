@@ -9,7 +9,6 @@ import ru.ivanovds.tasks.demo.repository.PersonRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +29,14 @@ public class PersonService {
         }
     }
 
-    public Optional<Person> getPersonById(Long id) {
-        return personRepository.findById(id);
+    public Person getPersonById(Long id) {
+        try {
+            return personRepository.findById(id).orElseThrow();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            return new Person();
+        }
     }
 
     public List<Task> getAllTaskByPerson(Person person) {
@@ -77,6 +82,8 @@ public class PersonService {
 
             return true;
         } catch (Exception e) {
+            log.error(e.getMessage());
+
             return false;
         }
     }
@@ -89,6 +96,8 @@ public class PersonService {
 
             return true;
         } catch (Exception e) {
+            log.error(e.getMessage());
+
             return false;
         }
     }
@@ -99,6 +108,8 @@ public class PersonService {
 
             return true;
         } catch (Exception e) {
+            log.error(e.getMessage());
+
             return false;
         }
     }
@@ -110,6 +121,8 @@ public class PersonService {
 
             return true;
         } catch (Exception e) {
+            log.error(e.getMessage());
+
             return false;
         }
     }

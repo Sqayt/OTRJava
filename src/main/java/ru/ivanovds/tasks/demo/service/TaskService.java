@@ -3,12 +3,13 @@ package ru.ivanovds.tasks.demo.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.ivanovds.tasks.demo.dto.TaskDto;
 import ru.ivanovds.tasks.demo.entity.Person;
 import ru.ivanovds.tasks.demo.entity.Task;
 import ru.ivanovds.tasks.demo.repository.TaskRepository;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,31 +18,60 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
-    // TODO не работает
-    public boolean saveTaskByPerson(Task task, Person person) {
+    //TODO протестить
+    public boolean saveTaskByPerson(Person person, TaskDto taskDto) {
         try {
+            Task task = new Task();
+
             task.setPerson(person);
+            task.setDescription(taskDto.getDescription());
+            task.setPriority(taskDto.getPriority());
+
             taskRepository.save(task);
 
             return true;
         } catch (Exception e) {
+            log.error(e.getMessage());
+
             return false;
         }
     }
 
-    public Optional<Task> getTaskById(Long id) {
-        return taskRepository.findById(id);
+    public TaskDto getTaskById(Long id) throws Exception {
+        try {
+            Task task = taskRepository.findById(id).orElseThrow();
+
+            return new TaskDto(task);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            throw new Exception("Ошибка в сервисе");
+        }
     }
 
-    public List<Task> getAllTaskByPerson(Person person) {
-        return person.getTasks();
+    public List<TaskDto> getAllTaskByPerson(Person person) {
+        List<Task> tasks = person.getTasks();
+        List<TaskDto> tasksDto = new ArrayList<>(tasks.size());
+
+        tasks.forEach(
+                it -> tasksDto.add(new TaskDto(it))
+        );
+
+        return tasksDto;
     }
 
-    public List<Task> getAllTask() {
-        return taskRepository.findAll();
+    public List<TaskDto> getAllTask() {
+        List<Task> tasks = taskRepository.findAll();
+        List<TaskDto> tasksDto = new ArrayList<>();
+
+        tasks.forEach(
+                it -> tasksDto.add(new TaskDto(it))
+        );
+
+        return tasksDto;
     }
 
-    public boolean updateTaskById(Long id, Task task) {
+    public boolean updateTaskById(Long id, TaskDto task) {
         try {
             Task taskOld = taskRepository.findById(id).orElseThrow();
 
@@ -52,6 +82,8 @@ public class TaskService {
 
             return true;
         } catch (Exception e) {
+            log.error(e.getMessage());
+
             return false;
         }
     }

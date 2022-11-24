@@ -1,6 +1,7 @@
 package ru.ivanovds.tasks.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -41,6 +42,7 @@ public class Person {
     @Column(name = "director_full_name")
     private String directorFullName;
 
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "person", orphanRemoval = true)
     @JsonIgnore
     private List<Task> tasks = new ArrayList<>();
