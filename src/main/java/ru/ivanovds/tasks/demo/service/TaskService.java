@@ -18,7 +18,6 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
-    //TODO протестить
     public boolean saveTaskByPerson(Person person, TaskDto taskDto) {
         try {
             Task task = new Task();

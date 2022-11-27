@@ -18,7 +18,7 @@ public class PersonController {
 
     private final PersonService personService;
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<HttpStatus> savePerson(@RequestBody Person person) {
         if (personService.savePerson(person)) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -66,7 +66,7 @@ public class PersonController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> updatePersonById(@PathVariable Long id,
                                                        @RequestBody Person person) {
         if (personService.updatePersonById(id, person)) {
