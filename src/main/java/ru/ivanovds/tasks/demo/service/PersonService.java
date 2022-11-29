@@ -66,7 +66,7 @@ public class PersonService {
 
             return true;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + " It is error");
 
             return false;
         }
