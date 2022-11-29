@@ -37,8 +37,13 @@ public class Task {
     private Person person;
 
     public Task(int priority, String description) {
-        this.priority = priority;
-        this.description = description;
+        if (!isEmpty(Integer.toString(priority))) this.priority = priority;
+        if (!isEmpty(description)) this.description = description;
+    }
+
+    public Task(Task task) {
+        if (!isEmpty(Integer.toString(task.getPriority()))) this.priority = task.getPriority();
+        if (!isEmpty(task.getDescription())) this.description = task.getDescription();
     }
 
     @Override
@@ -52,5 +57,9 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(id, priority, description, person);
+    }
+
+    private boolean isEmpty(String string) {
+        return string == null || string.isEmpty();
     }
 }

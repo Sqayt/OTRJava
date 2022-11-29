@@ -58,39 +58,49 @@ public class Person {
     }
 
     public Person(String post, String name, String surName, String middleName, String branchName, String directorFullName, List<Task> tasks) {
-        this.post = post;
-        this.name = name;
-        this.surName = surName;
-        this.middleName = middleName;
-        this.branchName = branchName;
+        if (!isEmpty(post)) this.post = post;
+        if (!isEmpty(name)) this.name = name;
+        if (!isEmpty(surName)) this.surName = surName;
+        if (!isEmpty(middleName)) this.middleName = middleName;
+        if (!isEmpty(branchName)) this.branchName = branchName;
         this.directorFullName = directorFullName;
         this.tasks = tasks;
     }
 
     public Person(String post, String name, String surName, String middleName, String branchName, List<Task> tasks) {
-        this.post = post;
-        this.name = name;
-        this.surName = surName;
-        this.middleName = middleName;
-        this.branchName = branchName;
+        if (!isEmpty(post)) this.post = post;
+        if (!isEmpty(name)) this.name = name;
+        if (!isEmpty(surName)) this.surName = surName;
+        if (!isEmpty(middleName)) this.middleName = middleName;
+        if (!isEmpty(branchName)) this.branchName = branchName;
         this.tasks = tasks;
     }
 
     public Person(String post, String name, String surName, String middleName, String branchName, String directorFullName) {
-        this.post = post;
-        this.name = name;
-        this.surName = surName;
-        this.middleName = middleName;
-        this.branchName = branchName;
+        if (!isEmpty(post)) this.post = post;
+        if (!isEmpty(name)) this.name = name;
+        if (!isEmpty(surName)) this.surName = surName;
+        if (!isEmpty(middleName)) this.middleName = middleName;
+        if (!isEmpty(branchName)) this.branchName = branchName;
         this.directorFullName = directorFullName;
     }
 
     public Person(String post, String name, String surName, String middleName, String branchName) {
-        this.post = post;
-        this.name = name;
-        this.surName = surName;
-        this.middleName = middleName;
-        this.branchName = branchName;
+        if (!isEmpty(post)) this.post = post;
+        if (!isEmpty(name)) this.name = name;
+        if (!isEmpty(surName)) this.surName = surName;
+        if (!isEmpty(middleName)) this.middleName = middleName;
+        if (!isEmpty(branchName)) this.branchName = branchName;
+    }
+
+    public Person(Person person) {
+        if (!isEmpty(person.getPost())) this.post = person.getPost();
+        if (!isEmpty(person.getName())) this.name = person.getName();
+        if (!isEmpty(person.getSurName())) this.surName = person.getSurName();
+        if (!isEmpty(person.getMiddleName())) this.middleName = person.getMiddleName();
+        if (!isEmpty(person.getBranchName())) this.branchName = person.getBranchName();
+        this.directorFullName = person.getDirectorFullName();
+        this.tasks = person.getTasks();
     }
 
     public void setTasks(List<Task> tasks) {
@@ -112,5 +122,9 @@ public class Person {
     @Override
     public int hashCode() {
         return Objects.hash(id, post, name, surName, middleName, branchName, directorFullName, tasks);
+    }
+
+    private boolean isEmpty(String string) {
+        return string == null || string.isEmpty();
     }
 }

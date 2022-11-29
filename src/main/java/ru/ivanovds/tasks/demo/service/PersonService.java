@@ -7,6 +7,7 @@ import ru.ivanovds.tasks.demo.entity.Person;
 import ru.ivanovds.tasks.demo.entity.Task;
 import ru.ivanovds.tasks.demo.repository.PersonRepository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class PersonService {
 
     public boolean savePerson(Person person) {
         try {
-            personRepository.save(person);
+            Person personNew = new Person(person);
+            personRepository.save(personNew);
 
             return true;
         } catch (Exception e) {
@@ -53,9 +55,13 @@ public class PersonService {
         return personRepository.findAll();
     }
 
-    public boolean addTaskByPerson(Person person, Task task) {
+    @Transactional
+    public boolean addTaskByPerson(Long id, Task task) {
         try {
-            person.addTask(task);
+            Person person = personRepository.findById(id).orElseThrow();
+            Task taskNew = new Task(task);
+
+            person.addTask(taskNew);
             personRepository.save(person);
 
             return true;

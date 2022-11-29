@@ -38,9 +38,20 @@ public class PersonServiceTest {
 
     @Test
     public void savePersonTest() {
-        Person person = new Person("Начальник", "Михаил", "Иванов", "Сергеевич", "ОАО");
+        Person person = new Person("Начальник", "Михаил", "Быков", "Сергеевич", "ОАО", "Задорнов Михаил Сергеевич");
         personService.savePerson(person);
-        Person personNew = personService.getPersonById(4L);
+        List<Person> people = personService.getAllPerson();
+        Person personNew = people.get(people.size() - 1);
+
+        Assertions.assertEquals(person.getName(), personNew.getName());
+    }
+
+    @Test
+    public void notSavePersonTest() {
+        Person person = new Person("Начальник", "", "Быков", "Сергеевич", "ОАО", "Задорнов Михаил Сергеевич");
+        personService.savePerson(person);
+        List<Person> people = personService.getAllPerson();
+        Person personNew = people.get(people.size() - 1);
 
         Assertions.assertEquals(person.getName(), personNew.getName());
     }
@@ -73,9 +84,8 @@ public class PersonServiceTest {
 
     @Test
     public void addTaskByPersonTest() {
-        Person person = personService.getPersonById(1L);
         Task task = new Task(18, "Это Тест");
-        personService.addTaskByPerson(person, task);
+        personService.addTaskByPerson(1L, task);
         Person personNew = personService.getPersonById(1L);
         List<Task> tasks = personNew.getTasks();
 

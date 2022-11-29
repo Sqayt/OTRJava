@@ -18,24 +18,6 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
-    public boolean saveTaskByPerson(Person person, TaskDto taskDto) {
-        try {
-            Task task = new Task();
-
-            task.setPerson(person);
-            task.setDescription(taskDto.getDescription());
-            task.setPriority(taskDto.getPriority());
-
-            taskRepository.save(task);
-
-            return true;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-
-            return false;
-        }
-    }
-
     public TaskDto getTaskById(Long id) throws Exception {
         try {
             Task task = taskRepository.findById(id).orElseThrow();

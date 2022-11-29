@@ -20,18 +20,6 @@ public class TaskServiceTest {
     PersonService personService;
 
     @Test
-    public void createTaskByNewPersonTest() throws Exception {
-        TaskDto task = new TaskDto(17,"It is test case");
-        Person person = new Person("Начальник", "Михаил", "Задорнов", "Сергеевич", "ОАО");
-        List<TaskDto> tasks = taskService.getAllTask();
-
-        taskService.saveTaskByPerson(person, task);
-        List<TaskDto> tasksNew = taskService.getAllTask();
-
-        Assertions.assertNotEquals(tasksNew.size(), tasks.size());
-    }
-
-    @Test
     public void getAllTaskByPersonTest() {
         Person person = personService.getPersonById(1L);
         List<TaskDto> tasks = taskService.getAllTaskByPerson(person);

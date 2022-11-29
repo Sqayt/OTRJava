@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ivanovds.tasks.demo.dto.TaskDto;
 import ru.ivanovds.tasks.demo.entity.Person;
+import ru.ivanovds.tasks.demo.entity.Task;
 import ru.ivanovds.tasks.demo.service.TaskService;
 
 import java.util.List;
@@ -18,21 +19,6 @@ import java.util.List;
 public class TaskController {
 
     private final TaskService service;
-
-    //TODO Еще протестить
-    @PostMapping("/{id}")
-    public ResponseEntity<?> saveTaskByPerson(@RequestBody Person person,
-                                              @RequestBody TaskDto taskDto) {
-        if (service.saveTaskByPerson(person, taskDto)) {
-
-            return new ResponseEntity<>(HttpStatus.OK);
-
-        } else {
-
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        }
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getTaskById(@PathVariable Long id) {

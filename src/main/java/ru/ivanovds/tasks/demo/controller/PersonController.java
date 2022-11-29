@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ivanovds.tasks.demo.entity.Person;
+import ru.ivanovds.tasks.demo.entity.Task;
 import ru.ivanovds.tasks.demo.service.PersonService;
 
 import java.util.List;
@@ -24,6 +25,16 @@ public class PersonController {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<HttpStatus> addTaskByPerson(@PathVariable Long id,
+                                                      @RequestBody Task task) {
+        if (personService.addTaskByPerson(id, task)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
     }
 
