@@ -82,7 +82,12 @@ public class PersonService {
             personOld.setSurName(person.getSurName());
             personOld.setMiddleName(person.getMiddleName());
             personOld.setPost(person.getPost());
-            personOld.setDirectorFullName(person.getDirectorFullName());
+
+            if (!personOld.getDirectorFullName().equals(person.getDirectorFullName())) {
+                personOld.setDirectorFullName(person.getDirectorFullName());
+            } else {
+                throw new Exception();
+            }
 
             personRepository.save(personOld);
 
@@ -123,7 +128,11 @@ public class PersonService {
     public boolean deletePersonById(Long id) {
         try {
             Person person = personRepository.findById(id).orElseThrow();
-            personRepository.delete(person);
+            if (person.getTasks().size() == 0) {
+                personRepository.delete(person);
+            } else {
+                throw new Exception();
+            }
 
             return true;
         } catch (Exception e) {
