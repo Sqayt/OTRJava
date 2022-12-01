@@ -35,23 +35,6 @@ public class TaskServiceTest {
         Assertions.assertEquals(task.getDescription(), taskOld.getDescription());
     }
 
-    //Проверка каскадов
-    @Test
-    public void deleteTaskByIdTest() {
-        taskService.deleteTaskById(27L);
-        Person person = personService.getPersonById(10L);
-
-        Assertions.assertNotEquals(person.getName(), null);
-    }
-
-    @Test
-    public void delTaskByIdTest() {
-        taskService.deleteTaskById(29L);
-        int sizeNew = taskService.getAllTask().size();
-
-        Assertions.assertNotEquals(2, sizeNew);
-    }
-
     @Test
     public void updateTaskByIdTest() throws Exception {
         TaskDto task = new TaskDto(3, "Помыть дом");
@@ -59,6 +42,15 @@ public class TaskServiceTest {
 
         TaskDto taskNew = taskService.getTaskById(2L);
         Assertions.assertEquals(task.getDescription(), taskNew.getDescription());
+    }
+
+    @Test
+    public void updateTaskByIdWithNOValidPriorityTest() throws Exception {
+        TaskDto task = new TaskDto(30, "Помыть дом");
+        taskService.updateTaskById(26L, task);
+
+        TaskDto taskNew = taskService.getTaskById(26L);
+        Assertions.assertNotEquals(taskNew.getPriority(), 30);
     }
 
     @Test

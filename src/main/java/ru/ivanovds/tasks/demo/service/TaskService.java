@@ -34,6 +34,7 @@ public class TaskService {
         }
     }
 
+    // Была задумка под получение задач определенного сотрудника
     public List<TaskDto> getAllTaskByPerson(Person person) {
         List<Task> tasks = person.getTasks();
         List<TaskDto> tasksDto = new ArrayList<>(tasks.size());
@@ -63,8 +64,13 @@ public class TaskService {
             Person person = personRepository.findById(id).orElseThrow();
 
             taskOld.setDescription(task.getDescription());
-            taskOld.setPriority(task.getPriority());
             taskOld.setPerson(person);
+
+            if (isPriorityValid(taskOld, task)) {
+                taskOld.setPriority(task.getPriority());
+            } else {
+                throw new Exception();
+            }
 
             taskRepository.save(taskOld);
 
@@ -95,18 +101,6 @@ public class TaskService {
 
     }
 
-    //TODO Не работает
-    public boolean deleteTaskById(Long id) {
-        try {
-            Task task = taskRepository.findById(id).orElseThrow();
-            taskRepository.delete(task);
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     public boolean deleteAllTask() {
         try {
             taskRepository.deleteAll();
@@ -114,6 +108,20 @@ public class TaskService {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    private boolean isPriorityValid(Task taskOld, TaskDto taskNew) {
+
+        Integer max = taskRepository.findMaximum();
+        Integer min = taskRepository.findMinimum();
+
+        if (taskOld.getPriority() == min && taskOld.getPriority() == max) {
+            if (taskOld.getPriority() == min && taskNew.getPriority() < min) {
+                return false;
+            } else return taskOld.getPriority() != max || taskNew.getPriority() <= max;
+        } else {
+            return true;
         }
     }
 }

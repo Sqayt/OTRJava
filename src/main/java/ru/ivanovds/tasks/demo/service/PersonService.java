@@ -41,6 +41,7 @@ public class PersonService {
         }
     }
 
+    // В будущем можно будет что нибудь сделать
     public List<Task> getAllTaskByPerson(Person person) {
         try {
             return person.getTasks();
@@ -97,6 +98,7 @@ public class PersonService {
         }
     }
 
+    // Подумать
     public boolean delTaskByPerson(Person person, Task task) {
         try {
             person.delTask(task);
