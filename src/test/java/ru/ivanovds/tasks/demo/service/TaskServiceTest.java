@@ -38,7 +38,7 @@ public class TaskServiceTest {
     //Проверка каскадов
     @Test
     public void deleteTaskByIdTest() {
-        taskService.deleteTaskById(10L);
+        taskService.deleteTaskById(27L);
         Person person = personService.getPersonById(10L);
 
         Assertions.assertNotEquals(person.getName(), null);
@@ -46,10 +46,10 @@ public class TaskServiceTest {
 
     @Test
     public void delTaskByIdTest() {
-        taskService.deleteTaskById(25L);
+        taskService.deleteTaskById(29L);
         int sizeNew = taskService.getAllTask().size();
 
-        Assertions.assertNotEquals(3, sizeNew);
+        Assertions.assertNotEquals(2, sizeNew);
     }
 
     @Test

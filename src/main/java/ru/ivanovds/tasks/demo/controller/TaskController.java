@@ -42,9 +42,10 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteTaskById(@PathVariable Long id) {
-        if (service.deleteTaskById(id)) {
+    @DeleteMapping("/{idPerson}/{idTask}")
+    public ResponseEntity<HttpStatus> deleteTaskById(@PathVariable Long idPerson,
+                                                     @PathVariable Long idTask) {
+        if (service.deleteTaskFromPersonById(idPerson, idTask)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);

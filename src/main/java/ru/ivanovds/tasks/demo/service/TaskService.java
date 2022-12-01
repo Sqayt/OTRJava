@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import ru.ivanovds.tasks.demo.dto.TaskDto;
 import ru.ivanovds.tasks.demo.entity.Person;
 import ru.ivanovds.tasks.demo.entity.Task;
+import ru.ivanovds.tasks.demo.repository.PersonRepository;
 import ru.ivanovds.tasks.demo.repository.TaskRepository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,8 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+
+    private final PersonRepository personRepository;
 
     public TaskDto getTaskById(Long id) throws Exception {
         try {
@@ -52,12 +56,15 @@ public class TaskService {
         return tasksDto;
     }
 
+    //TODO Обдумать эти вещи
     public boolean updateTaskById(Long id, TaskDto task) {
         try {
-            Task taskOld = taskRepository.findById(id).orElseThrow();
+            Task taskOld = taskRepository.findById(task.getId()).orElseThrow();
+            Person person = personRepository.findById(id).orElseThrow();
 
             taskOld.setDescription(task.getDescription());
             taskOld.setPriority(task.getPriority());
+            taskOld.setPerson(person);
 
             taskRepository.save(taskOld);
 
@@ -69,9 +76,30 @@ public class TaskService {
         }
     }
 
+    //TODO Обдумать эту вещь
+    @Transactional
+    public boolean deleteTaskFromPersonById(Long idPerson, Long idTask) {
+        try {
+            Person person = personRepository.findById(idPerson).orElseThrow();
+            Task task = taskRepository.findById(idTask).orElseThrow();
+            person.delTask(task);
+
+            personRepository.save(person);
+
+            return true;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            return false;
+        }
+
+    }
+
+    //TODO Не работает
     public boolean deleteTaskById(Long id) {
         try {
-            taskRepository.deleteById(id);
+            Task task = taskRepository.findById(id).orElseThrow();
+            taskRepository.delete(task);
 
             return true;
         } catch (Exception e) {

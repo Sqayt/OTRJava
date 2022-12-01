@@ -10,6 +10,8 @@ public class TaskDto {
     private String fullNamePerson;
     private int priority;
 
+    private Long personId;
+
     public TaskDto(Task task) {
         this.id = task.getId();
         this.description = task.getDescription();
@@ -24,6 +26,12 @@ public class TaskDto {
     public TaskDto(int priority, String description) {
         this.description = description;
         this.priority = priority;
+    }
+
+    public TaskDto(int priority, String description, Long personId) {
+        this.description = description;
+        this.priority = priority;
+        this.personId = personId;
     }
 
 }

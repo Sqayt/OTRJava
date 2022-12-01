@@ -66,7 +66,7 @@ public class PersonService {
 
             return true;
         } catch (Exception e) {
-            log.error(e.getMessage() + " It is error");
+            log.error(e.getMessage());
 
             return false;
         }
@@ -76,8 +76,6 @@ public class PersonService {
         try {
             Person personOld = personRepository.findById(id).orElseThrow();
 
-            personOld.setBranchName(person.getBranchName());
-            personOld.setTasks(person.getTasks());
             personOld.setName(person.getName());
             personOld.setSurName(person.getSurName());
             personOld.setMiddleName(person.getMiddleName());

@@ -94,12 +94,12 @@ public class PersonServiceTest {
 
     @Test
     public void delTaskByPersonTest() {
-        Person person = personService.getPersonById(10L);
+        Person person = personService.getPersonById(1L);
         List<Task> tasks = person.getTasks();
         Task task = person.getTasks().get(0);
         personService.delTaskByPerson(person, task);
 
-        Assertions.assertEquals(tasks.size(), 1);
+        Assertions.assertEquals(tasks.size(), 0);
     }
 
     @Test

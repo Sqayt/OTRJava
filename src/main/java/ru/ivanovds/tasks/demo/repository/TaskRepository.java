@@ -6,4 +6,5 @@ import ru.ivanovds.tasks.demo.entity.Task;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
+    void deleteTaskById(Long id);
 }
