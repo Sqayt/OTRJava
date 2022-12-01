@@ -6,8 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ivanovds.tasks.demo.dto.TaskDto;
-import ru.ivanovds.tasks.demo.entity.Person;
-import ru.ivanovds.tasks.demo.entity.Task;
 import ru.ivanovds.tasks.demo.service.TaskService;
 
 import java.util.List;

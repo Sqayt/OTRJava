@@ -94,7 +94,7 @@ public class PersonServiceTest {
 
     @Test
     public void delTaskByPersonTest() {
-        Person person = personService.getPersonById(1L);
+        Person person = personService.getPersonById(10L);
         List<Task> tasks = person.getTasks();
         Task task = person.getTasks().get(0);
         personService.delTaskByPerson(person, task);

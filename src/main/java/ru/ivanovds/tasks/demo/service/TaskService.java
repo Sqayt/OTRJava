@@ -71,8 +71,7 @@ public class TaskService {
 
     public boolean deleteTaskById(Long id) {
         try {
-            Task task = taskRepository.findById(id).orElseThrow();
-            taskRepository.delete(task);
+            taskRepository.deleteById(id);
 
             return true;
         } catch (Exception e) {

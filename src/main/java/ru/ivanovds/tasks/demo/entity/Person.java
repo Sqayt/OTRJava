@@ -42,9 +42,7 @@ public class Person {
     @Column(name = "director_full_name")
     private String directorFullName;
 
-    @JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "person", orphanRemoval = true)
-    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "person", orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 
     public void addTask(Task task) {

@@ -35,12 +35,21 @@ public class TaskServiceTest {
         Assertions.assertEquals(task.getDescription(), taskOld.getDescription());
     }
 
+    //Проверка каскадов
     @Test
     public void deleteTaskByIdTest() {
-        taskService.deleteTaskById(1L);
-        Person person = personService.getPersonById(1L);
+        taskService.deleteTaskById(10L);
+        Person person = personService.getPersonById(10L);
 
         Assertions.assertNotEquals(person.getName(), null);
+    }
+
+    @Test
+    public void delTaskByIdTest() {
+        taskService.deleteTaskById(25L);
+        int sizeNew = taskService.getAllTask().size();
+
+        Assertions.assertNotEquals(3, sizeNew);
     }
 
     @Test
