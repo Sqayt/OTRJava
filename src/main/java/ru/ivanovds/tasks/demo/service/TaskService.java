@@ -57,7 +57,7 @@ public class TaskService {
         return tasksDto;
     }
 
-    //TODO Обдумать эти вещи
+    //TODO Обдумать (оптимизировать)
     public boolean updateTaskById(Long id, TaskDto task) {
         try {
             Task taskOld = taskRepository.findById(task.getId()).orElseThrow();
@@ -82,7 +82,7 @@ public class TaskService {
         }
     }
 
-    //TODO Обдумать эту вещь
+    //TODO Обдумать (оптимизировать)
     @Transactional
     public boolean deleteTaskFromPersonById(Long idPerson, Long idTask) {
         try {
