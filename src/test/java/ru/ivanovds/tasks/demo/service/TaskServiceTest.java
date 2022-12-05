@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.ivanovds.tasks.demo.dto.TaskDto;
-import ru.ivanovds.tasks.demo.entity.Person;
-import ru.ivanovds.tasks.demo.entity.Task;
 
 import java.util.List;
 
@@ -20,44 +18,57 @@ public class TaskServiceTest {
     PersonService personService;
 
     @Test
-    public void getAllTaskByPersonTest() {
-        Person person = personService.getPersonById(1L);
-        List<TaskDto> tasks = taskService.getAllTaskByPerson(person);
+    public void getAllTasksTest() {
+        List<TaskDto> tasks = taskService.getAllTask();
 
-        Assertions.assertEquals(2, tasks.size());
+        Assertions.assertNotEquals(tasks.size(), 0);
+    }
+
+    @Test
+    public void saveTaskTest() {
+        TaskDto taskDto = new TaskDto(10, "TestSave", 48L);
+        taskService.saveTask(taskDto);
+
+        List<TaskDto> tasks = taskService.getAllTask();
+        TaskDto task = tasks.get(tasks.size() - 1);
+
+        Assertions.assertEquals(task.getDescription(), taskDto.getDescription());
     }
 
     @Test
     public void getTaskByIdTest() throws Exception {
-        Task task = new Task(1, "Построить ракету");
-        TaskDto taskOld = taskService.getTaskById(1L);
+        TaskDto taskDto = taskService.getTaskById(42L);
 
-        Assertions.assertEquals(task.getDescription(), taskOld.getDescription());
+        Assertions.assertEquals(taskDto.getDescription(), "Test");
     }
 
     @Test
     public void updateTaskByIdTest() throws Exception {
-        TaskDto task = new TaskDto(3, "Помыть дом");
-        taskService.updateTaskById(2L, task);
+         TaskDto taskDto = new TaskDto(123, "Test Update", 48L);
+         Long id = 42L;
 
-        TaskDto taskNew = taskService.getTaskById(2L);
-        Assertions.assertEquals(task.getDescription(), taskNew.getDescription());
+         taskService.updateTaskById(id, taskDto);
+
+         TaskDto taskDtoNew = taskService.getTaskById(id);
+
+         Assertions.assertEquals(taskDtoNew.getDescription(), taskDto.getDescription());
     }
 
     @Test
-    public void updateTaskByIdWithNOValidPriorityTest() throws Exception {
-        TaskDto task = new TaskDto(30, "Помыть дом");
-        taskService.updateTaskById(26L, task);
+    public void deleteTaskByIdTest() {
+        taskService.deleteTaskById(42L);
 
-        TaskDto taskNew = taskService.getTaskById(26L);
-        Assertions.assertNotEquals(taskNew.getPriority(), 30);
-    }
-
-    @Test
-    public void deleteAllTaskTest() {
-        taskService.deleteAllTask();
         List<TaskDto> tasks = taskService.getAllTask();
-        Assertions.assertNotEquals(1, tasks.size());
+
+        Assertions.assertEquals(1, tasks.size());
     }
 
+    @Test
+    public void delAllTasksTest() {
+        taskService.delAllTask();
+
+        List<TaskDto> tasks = taskService.getAllTask();
+
+        Assertions.assertEquals(0, tasks.size());
+    }
 }

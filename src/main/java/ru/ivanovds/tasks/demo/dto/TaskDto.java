@@ -1,7 +1,7 @@
 package ru.ivanovds.tasks.demo.dto;
 
 import lombok.Data;
-import ru.ivanovds.tasks.demo.entity.Task;
+import ru.ivanovds.tasks.demo.entity.tables.pojos.Task;
 
 @Data
 public class TaskDto {
@@ -16,16 +16,10 @@ public class TaskDto {
         this.id = task.getId();
         this.description = task.getDescription();
         this.priority = task.getPriority();
-        this.fullNamePerson = task.getPerson().getSurName() + " " + task.getPerson().getName() + " " +
-                task.getPerson().getMiddleName();
+        this.fullNamePerson = String.valueOf(task.getPersonId());
     }
 
     public TaskDto() {
-    }
-
-    public TaskDto(int priority, String description) {
-        this.description = description;
-        this.priority = priority;
     }
 
     public TaskDto(int priority, String description, Long personId) {

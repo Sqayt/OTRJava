@@ -10,6 +10,7 @@ import ru.ivanovds.tasks.demo.service.TaskService;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/v1/tasks")
 @RequiredArgsConstructor
@@ -42,10 +43,9 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping("/{idPerson}/{idTask}")
-    public ResponseEntity<HttpStatus> deleteTaskById(@PathVariable Long idPerson,
-                                                     @PathVariable Long idTask) {
-        if (service.deleteTaskFromPersonById(idPerson, idTask)) {
+    @DeleteMapping("/{idTask}")
+    public ResponseEntity<HttpStatus> deleteTaskById(@PathVariable Long idTask) {
+        if (service.deleteTaskById(idTask)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -64,7 +64,7 @@ public class TaskController {
 
     @DeleteMapping()
     public ResponseEntity<HttpStatus> deleteAllTask() {
-        if (service.deleteAllTask()) {
+        if (service.delAllTask()) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else  {
             return new ResponseEntity<>(HttpStatus.CONFLICT);

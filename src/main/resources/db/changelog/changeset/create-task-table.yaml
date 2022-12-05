@@ -1,7 +1,8 @@
 databaseChangeLog:
   - changeSet:
-      id: create-task1
+      id: create-task-jooq
       author: SqGoliaf
+      ignore: true
       changes:
         - createTable:
             columns:

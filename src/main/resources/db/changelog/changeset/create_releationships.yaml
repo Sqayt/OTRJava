@@ -1,7 +1,8 @@
 databaseChangeLog:
   - changeSet:
-      id: create-relationships1
+      id: create-relationships-jooq
       author: SqGoliaf
+      ignore: true
       changes:
         - addUniqueConstraint:
             columnNames: id
@@ -15,6 +16,12 @@ databaseChangeLog:
             baseColumnNames: person_id
             baseTableName: task
             constraintName: FK_TASK_ON_PERSON
+            referencedColumnNames: id
+            referencedTableName: person
+        - addForeignKeyConstraint:
+            baseColumnNames: fk_director_person_id
+            baseTableName: person
+            constraintName: FK_DIRECTOR_PERSON
             referencedColumnNames: id
             referencedTableName: person
 

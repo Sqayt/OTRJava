@@ -2,29 +2,31 @@ package ru.ivanovds.tasks.demo.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Service;
 import ru.ivanovds.tasks.demo.dto.TaskDto;
-import ru.ivanovds.tasks.demo.entity.Person;
-import ru.ivanovds.tasks.demo.entity.Task;
-import ru.ivanovds.tasks.demo.repository.PersonRepository;
-import ru.ivanovds.tasks.demo.repository.TaskRepository;
+import ru.ivanovds.tasks.demo.entity.Tables;
+import ru.ivanovds.tasks.demo.entity.tables.pojos.Task;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class TaskService {
 
-    private final TaskRepository taskRepository;
-
-    private final PersonRepository personRepository;
+    private final DSLContext dslContext;
 
     public TaskDto getTaskById(Long id) throws Exception {
         try {
-            Task task = taskRepository.findById(id).orElseThrow();
+            Task task = Objects.requireNonNull(dslContext
+                            .selectFrom(Tables.TASK)
+                            .where(Tables.TASK.ID.eq(id))
+                            .fetchAny())
+                    .into(Task.class);
 
             return new TaskDto(task);
         } catch (Exception e) {
@@ -34,63 +36,60 @@ public class TaskService {
         }
     }
 
-    // Была задумка под получение задач определенного сотрудника
-    public List<TaskDto> getAllTaskByPerson(Person person) {
-        List<Task> tasks = person.getTasks();
-        List<TaskDto> tasksDto = new ArrayList<>(tasks.size());
+    @Transactional
+    public boolean saveTask(TaskDto taskDto) {
+        try {
+            Task task = new Task(null, taskDto.getPriority(), taskDto.getDescription(), taskDto.getPersonId());
 
-        tasks.forEach(
-                it -> tasksDto.add(new TaskDto(it))
-        );
+            dslContext
+                    .insertInto(Tables.TASK)
+                    .set(dslContext.newRecord(Tables.TASK, task))
+                    .returning()
+                    .fetchOptional()
+                    .orElseThrow(() -> new DataAccessException("Error insert into" + task.toString()));
 
-        return tasksDto;
+            return true;
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+
+            return false;
+        }
     }
 
     public List<TaskDto> getAllTask() {
-        List<Task> tasks = taskRepository.findAll();
-        List<TaskDto> tasksDto = new ArrayList<>();
-
-        tasks.forEach(
-                it -> tasksDto.add(new TaskDto(it))
-        );
-
-        return tasksDto;
+        return dslContext
+                .selectFrom(Tables.TASK)
+                .orderBy(Tables.TASK.PRIORITY.desc())
+                .fetchInto(TaskDto.class);
     }
 
-    //TODO Обдумать (оптимизировать)
-    public boolean updateTaskById(Long id, TaskDto task) {
-        try {
-            Task taskOld = taskRepository.findById(task.getId()).orElseThrow();
-            Person person = personRepository.findById(id).orElseThrow();
-
-            taskOld.setDescription(task.getDescription());
-            taskOld.setPerson(person);
-
-            if (isPriorityValid(taskOld, task)) {
-                taskOld.setPriority(task.getPriority());
-            } else {
-                throw new Exception();
-            }
-
-            taskRepository.save(taskOld);
-
-            return true;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-
-            return false;
-        }
-    }
-
-    //TODO Обдумать (оптимизировать)
     @Transactional
-    public boolean deleteTaskFromPersonById(Long idPerson, Long idTask) {
+    public boolean updateTaskById(Long id, TaskDto taskDto) {
         try {
-            Person person = personRepository.findById(idPerson).orElseThrow();
-            Task task = taskRepository.findById(idTask).orElseThrow();
-            person.delTask(task);
+            dslContext
+                    .update(Tables.TASK)
+                    .set(Tables.TASK.DESCRIPTION, taskDto.getDescription())
+                    .set(Tables.TASK.PRIORITY, taskDto.getPriority())
+                    .set(Tables.TASK.PERSON_ID, taskDto.getPersonId())
+                    .where(Tables.TASK.ID.eq(id))
+                    .returning()
+                    .fetchOptional()
+                    .orElseThrow(() -> new DataAccessException("Error in update by id: "
+                            + id + ", taskDto: " + taskDto));
 
-            personRepository.save(person);
+            return true;
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+
+            return false;
+        }
+    }
+
+    public boolean delAllTask() {
+        try {
+            dslContext
+                    .deleteFrom(Tables.TASK)
+                    .execute();
 
             return true;
         } catch (Exception e) {
@@ -98,30 +97,38 @@ public class TaskService {
 
             return false;
         }
-
     }
 
-    public boolean deleteAllTask() {
+    @Transactional
+    public boolean deleteTaskById(Long id) {
         try {
-            taskRepository.deleteAll();
+            dslContext
+                    .deleteFrom(Tables.TASK)
+                    .where(Tables.TASK.ID.eq(id))
+                    .execute();
 
             return true;
         } catch (Exception e) {
+            log.error(e.getMessage());
+
             return false;
         }
     }
 
-    private boolean isPriorityValid(Task taskOld, TaskDto taskNew) {
-
-        Integer max = taskRepository.findMaximum();
-        Integer min = taskRepository.findMinimum();
-
-        if (taskOld.getPriority() == min && taskOld.getPriority() == max) {
-            if (taskOld.getPriority() == min && taskNew.getPriority() < min) {
-                return false;
-            } else return taskOld.getPriority() != max || taskNew.getPriority() <= max;
-        } else {
-            return true;
-        }
-    }
+//    private boolean isPriorityValid(Task taskOld, TaskDto taskNew) {
+//
+//        Integer max = dslContext
+//                .selectFrom(Tables.TASK)
+//                .
+//
+//        Integer min = taskRepository.findMinimum();
+//
+//        if (taskOld.getPriority() == min && taskOld.getPriority() == max) {
+//            if (taskOld.getPriority() == min && taskNew.getPriority() < min) {
+//                return false;
+//            } else return taskOld.getPriority() != max || taskNew.getPriority() <= max;
+//        } else {
+//            return true;
+//        }
+//    }
 }

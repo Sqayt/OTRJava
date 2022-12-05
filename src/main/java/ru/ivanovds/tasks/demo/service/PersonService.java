@@ -2,26 +2,31 @@ package ru.ivanovds.tasks.demo.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Service;
-import ru.ivanovds.tasks.demo.entity.Person;
-import ru.ivanovds.tasks.demo.entity.Task;
-import ru.ivanovds.tasks.demo.repository.PersonRepository;
+import ru.ivanovds.tasks.demo.entity.tables.pojos.Person;
+import ru.ivanovds.tasks.demo.entity.Tables;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class PersonService {
+    private final DSLContext dslContext;
 
-    private final PersonRepository personRepository;
-
+    @Transactional
     public boolean savePerson(Person person) {
         try {
-            Person personNew = new Person(person);
-            personRepository.save(personNew);
+            dslContext
+                    .insertInto(Tables.PERSON)
+                    .set(dslContext.newRecord(Tables.PERSON, person))
+                    .returning()
+                    .fetchOptional()
+                    .orElseThrow(() -> new DataAccessException("Error into person: " + person.toString()));
 
             return true;
         } catch (Exception e) {
@@ -31,82 +36,41 @@ public class PersonService {
         }
     }
 
-    public Person getPersonById(Long id) {
+    @Transactional
+    public Person getPersonById(Long id) throws Exception {
         try {
-            return personRepository.findById(id).orElseThrow();
+            return Objects.requireNonNull(dslContext
+                            .selectFrom(Tables.PERSON)
+                            .where(Tables.PERSON.ID.eq(id))
+                            .fetchAny())
+                    .into(Person.class);
         } catch (Exception e) {
             log.error(e.getMessage());
 
-            return new Person();
-        }
-    }
-
-    // В будущем можно будет что нибудь сделать
-    public List<Task> getAllTaskByPerson(Person person) {
-        try {
-            return person.getTasks();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-
-            return new ArrayList<>();
+            throw new Exception();
         }
     }
 
     public List<Person> getAllPerson() {
-        return personRepository.findAll();
+        return dslContext
+                .selectFrom(Tables.PERSON)
+                .fetchInto(Person.class);
     }
 
     @Transactional
-    public boolean addTaskByPerson(Long id, Task task) {
-        try {
-            Person person = personRepository.findById(id).orElseThrow();
-            Task taskNew = new Task(task);
-
-            person.addTask(taskNew);
-            personRepository.save(person);
-
-            return true;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-
-            return false;
-        }
-    }
-
     public boolean updatePersonById(Long id, Person person) {
         try {
-            Person personOld = personRepository.findById(id).orElseThrow();
-
-            personOld.setName(person.getName());
-            personOld.setSurName(person.getSurName());
-            personOld.setMiddleName(person.getMiddleName());
-            personOld.setPost(person.getPost());
-
-            if (!personOld.getDirectorFullName().equals(person.getDirectorFullName())) {
-                personOld.setDirectorFullName(person.getDirectorFullName());
-            } else {
-                throw new Exception();
-            }
-
-            personRepository.save(personOld);
+            dslContext
+                    .update(Tables.PERSON)
+                    .set(dslContext.newRecord(Tables.PERSON, person))
+                    .where(Tables.PERSON.ID.eq(id))
+                    .returning()
+                    .fetchOptional()
+                    .orElseThrow(() -> new DataAccessException("Error update entity by id:" + id))
+                    .into(Person.class);
 
             return true;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-
-            return false;
-        }
-    }
-
-    // Подумать
-    public boolean delTaskByPerson(Person person, Task task) {
-        try {
-            person.delTask(task);
-
-            personRepository.save(person);
-
-            return true;
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             log.error(e.getMessage());
 
             return false;
@@ -115,7 +79,9 @@ public class PersonService {
 
     public boolean delAllPerson() {
         try {
-            personRepository.deleteAll();
+            dslContext
+                    .deleteFrom(Tables.PERSON)
+                    .execute();
 
             return true;
         } catch (Exception e) {
@@ -125,14 +91,13 @@ public class PersonService {
         }
     }
 
+    @Transactional
     public boolean deletePersonById(Long id) {
         try {
-            Person person = personRepository.findById(id).orElseThrow();
-            if (person.getTasks().size() == 0) {
-                personRepository.delete(person);
-            } else {
-                throw new Exception();
-            }
+            dslContext
+                    .deleteFrom(Tables.PERSON)
+                    .where(Tables.PERSON.ID.eq(id))
+                    .execute();
 
             return true;
         } catch (Exception e) {

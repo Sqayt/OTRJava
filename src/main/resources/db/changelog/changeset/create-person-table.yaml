@@ -1,7 +1,8 @@
 databaseChangeLog:
   - changeSet:
-      id: create-person1
+      id: create-person-jooq
       author: SqGoliaf
+      ignore: true
       changes:
         - createTable:
             columns:
@@ -39,6 +40,6 @@ databaseChangeLog:
                   name: branch_name
                   type: VARCHAR(255)
               - column:
-                  name: director_full_name
-                  type: VARCHAR(255)
+                  name: fk_director_person_id
+                  type: BIGINT
             tableName: person
