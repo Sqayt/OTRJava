@@ -12,6 +12,7 @@ import ru.ivanovds.tasks.demo.entity.tables.pojos.Task;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -115,20 +116,29 @@ public class TaskService {
         }
     }
 
-//    private boolean isPriorityValid(Task taskOld, TaskDto taskNew) {
-//
-//        Integer max = dslContext
-//                .selectFrom(Tables.TASK)
-//                .
-//
-//        Integer min = taskRepository.findMinimum();
-//
-//        if (taskOld.getPriority() == min && taskOld.getPriority() == max) {
-//            if (taskOld.getPriority() == min && taskNew.getPriority() < min) {
-//                return false;
-//            } else return taskOld.getPriority() != max || taskNew.getPriority() <= max;
-//        } else {
-//            return true;
-//        }
-//    }
+    private boolean isPriorityValid(Task taskOld, TaskDto taskNew) {
+
+        List<Integer> values = dslContext
+                .select(Tables.TASK.PRIORITY)
+                .from(Tables.TASK)
+                .fetchInto(Integer.class);
+
+        Optional<Integer> minOptional = values.stream().min(Integer::compare);
+        Optional<Integer> maxOptional = values.stream().max(Integer::compare);
+
+        if (values.isEmpty()) {
+            return true;
+        }
+
+        int max = maxOptional.orElseThrow();
+        int min = minOptional.orElseThrow();
+
+        if (taskOld.getPriority() == min && taskOld.getPriority() == max) {
+            if (taskOld.getPriority() == min && taskNew.getPriority() < min) {
+                return false;
+            } else return taskOld.getPriority() != max || taskNew.getPriority() <= max;
+        } else {
+            return true;
+        }
+    }
 }
