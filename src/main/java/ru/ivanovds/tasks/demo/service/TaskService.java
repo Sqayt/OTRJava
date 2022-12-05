@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import ru.ivanovds.tasks.demo.dto.TaskDto;
 import ru.ivanovds.tasks.demo.entity.Tables;
 import ru.ivanovds.tasks.demo.entity.tables.pojos.Task;
+import ru.ivanovds.tasks.demo.repository.impl.TaskRepository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,126 +21,69 @@ import java.util.Optional;
 @Slf4j
 public class TaskService {
 
-    private final DSLContext dslContext;
+    private final TaskRepository repository;
 
     public TaskDto getTaskById(Long id) throws Exception {
-        try {
-            Task task = Objects.requireNonNull(dslContext
-                            .selectFrom(Tables.TASK)
-                            .where(Tables.TASK.ID.eq(id))
-                            .fetchAny())
-                    .into(Task.class);
-
-            return new TaskDto(task);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-
-            throw new Exception("Ошибка в сервисе");
-        }
+        Task task = repository.findById(id);
+        return new TaskDto(task);
     }
 
-    @Transactional
     public boolean saveTask(TaskDto taskDto) {
-        try {
-            Task task = new Task(null, taskDto.getPriority(), taskDto.getDescription(), taskDto.getPersonId());
-
-            dslContext
-                    .insertInto(Tables.TASK)
-                    .set(dslContext.newRecord(Tables.TASK, task))
-                    .returning()
-                    .fetchOptional()
-                    .orElseThrow(() -> new DataAccessException("Error insert into" + task.toString()));
-
-            return true;
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-
-            return false;
-        }
+        Task task = new Task(null, taskDto.getPriority(), taskDto.getDescription(), taskDto.getPersonId());
+        return repository.insert(task);
     }
 
     public List<TaskDto> getAllTask() {
-        return dslContext
-                .selectFrom(Tables.TASK)
-                .orderBy(Tables.TASK.PRIORITY.desc())
-                .fetchInto(TaskDto.class);
+        List<Task> tasks = repository.findAll();
+        List<TaskDto> taskDtos = new ArrayList<>(tasks.size());
+
+        tasks.forEach(
+                it -> {
+                    TaskDto taskDto = new TaskDto(it);
+
+                    String fullName = "";
+
+                    try {
+                         fullName = repository.findFullNameById(taskDto.getPersonId());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    taskDto.setFullNamePerson(fullName);
+
+                    taskDtos.add(taskDto);
+                }
+        );
+
+        return taskDtos;
     }
 
-    @Transactional
     public boolean updateTaskById(Long id, TaskDto taskDto) {
-        try {
-            dslContext
-                    .update(Tables.TASK)
-                    .set(Tables.TASK.DESCRIPTION, taskDto.getDescription())
-                    .set(Tables.TASK.PRIORITY, taskDto.getPriority())
-                    .set(Tables.TASK.PERSON_ID, taskDto.getPersonId())
-                    .where(Tables.TASK.ID.eq(id))
-                    .returning()
-                    .fetchOptional()
-                    .orElseThrow(() -> new DataAccessException("Error in update by id: "
-                            + id + ", taskDto: " + taskDto));
-
-            return true;
-        } catch (DataAccessException e) {
-            log.error(e.getMessage());
-
-            return false;
-        }
+        Task task = new Task(id, taskDto.getPriority(), taskDto.getDescription(), taskDto.getPersonId());
+        return repository.update(id, task);
     }
 
     public boolean delAllTask() {
-        try {
-            dslContext
-                    .deleteFrom(Tables.TASK)
-                    .execute();
-
-            return true;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-
-            return false;
-        }
+        return repository.deleteAll();
     }
 
     @Transactional
     public boolean deleteTaskById(Long id) {
-        try {
-            dslContext
-                    .deleteFrom(Tables.TASK)
-                    .where(Tables.TASK.ID.eq(id))
-                    .execute();
-
-            return true;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-
-            return false;
-        }
+        return repository.delete(id);
     }
 
-    private boolean isPriorityValid(Task taskOld, TaskDto taskNew) {
+    public String findFullNameById(Long id) throws Exception {
+        return repository.findFullNameById(id);
+    }
 
-        List<Integer> values = dslContext
-                .select(Tables.TASK.PRIORITY)
-                .from(Tables.TASK)
-                .fetchInto(Integer.class);
+    public String countTaskByPersonId(Long id) {
+        return repository.countTaskByPersonId(id);
+    }
 
-        Optional<Integer> minOptional = values.stream().min(Integer::compare);
-        Optional<Integer> maxOptional = values.stream().max(Integer::compare);
+    public Integer getMaxPriority() {
+        return repository.getMaxPriority();
+    }
 
-        if (values.isEmpty()) {
-            return true;
-        }
-
-        int max = maxOptional.orElseThrow();
-        int min = minOptional.orElseThrow();
-
-        if (taskOld.getPriority() == min && taskOld.getPriority() == max) {
-            if (taskOld.getPriority() == min && taskNew.getPriority() < min) {
-                return false;
-            } else return taskOld.getPriority() != max || taskNew.getPriority() <= max;
-        } else {
-            return true;
-        }
+    public Integer getMinPriority() {
+        return repository.getMinPriority();
     }
 }

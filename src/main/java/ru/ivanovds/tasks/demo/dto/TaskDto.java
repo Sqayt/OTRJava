@@ -16,6 +16,7 @@ public class TaskDto {
         this.id = task.getId();
         this.description = task.getDescription();
         this.priority = task.getPriority();
+        this.personId = task.getPersonId();
         this.fullNamePerson = String.valueOf(task.getPersonId());
     }
 

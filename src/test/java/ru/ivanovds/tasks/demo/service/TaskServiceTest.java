@@ -1,21 +1,25 @@
 package ru.ivanovds.tasks.demo.service;
 
+import lombok.extern.slf4j.Slf4j;
+import org.jooq.DSLContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.ivanovds.tasks.demo.dto.TaskDto;
+import ru.ivanovds.tasks.demo.entity.Tables;
 
 import java.util.List;
 
 @SpringBootTest
+@Slf4j
 public class TaskServiceTest {
 
     @Autowired
     TaskService taskService;
 
     @Autowired
-    PersonService personService;
+    DSLContext context;
 
     @Test
     public void getAllTasksTest() {
@@ -70,5 +74,35 @@ public class TaskServiceTest {
         List<TaskDto> tasks = taskService.getAllTask();
 
         Assertions.assertEquals(0, tasks.size());
+    }
+
+    @Test
+    public void findFullNameByIdTest() throws Exception {
+        Long id = 1L;
+        String fullName = taskService.findFullNameById(id);
+
+        Assertions.assertNotEquals(fullName, "");
+        Assertions.assertNotNull(fullName);
+    }
+
+    @Test
+    public void countTaskByPersonIdTest() {
+        String count = taskService.countTaskByPersonId(1L);
+
+        Assertions.assertEquals("2", count);
+    }
+
+    @Test
+    public void getMaxPriorityTest() {
+        Integer max = taskService.getMaxPriority();
+
+        Assertions.assertEquals(229, max);
+    }
+
+    @Test
+    public void getMinPriorityTest() {
+        Integer min = taskService.getMinPriority();
+
+        Assertions.assertEquals(2, min);
     }
 }

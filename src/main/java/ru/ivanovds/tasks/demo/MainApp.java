@@ -8,30 +8,11 @@ import ru.ivanovds.tasks.demo.service.PersonService;
 
 @SpringBootApplication(scanBasePackages = {"ru.ivanovds.tasks.demo"})
 @RequiredArgsConstructor
-public class MainApp implements CommandLineRunner {
+public class MainApp {
 
 	private final PersonService personService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MainApp.class, args);
-	}
-
-	@Override
-	public void run(String... args) throws Exception {
-//		Person michail = new Person("Начальник", "Михаил", "Задорнов", "Сергеевич", "ОАО");
-//		Person sacha = new Person("Работник", "Александр", "Жуйков", "Сергеевич", "Кипр");
-//		Person lisa = new Person("Бухгалтер", "Елизавета", "Казакова", "Владимирована", "Дубай");
-//
-//		Task cleanTerritory = new Task(1,"Убрать территорию");
-//		Task createRocket = new Task(29, "Построить ракету");
-//		Task flyOnPlane = new Task(2,"Полетать на самолете");
-//
-//		michail.setTasks(List.of(createRocket, flyOnPlane));
-//		lisa.setTasks(List.of(cleanTerritory));
-//
-//		List<Person> people = List.of(michail, sacha, lisa);
-//		people.forEach(personService::savePerson);
-//
-//		personService.savePerson(sacha);
 	}
 }
