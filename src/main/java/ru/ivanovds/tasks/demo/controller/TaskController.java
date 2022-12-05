@@ -43,6 +43,15 @@ public class TaskController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<HttpStatus> saveTask(@RequestBody TaskDto task) {
+        if (service.saveTask(task)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
+    }
+
     @DeleteMapping("/{idTask}")
     public ResponseEntity<HttpStatus> deleteTaskById(@PathVariable Long idTask) {
         if (service.deleteTaskById(idTask)) {
