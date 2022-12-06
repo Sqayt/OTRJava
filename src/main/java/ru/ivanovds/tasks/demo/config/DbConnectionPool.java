@@ -1,4 +1,4 @@
-package ru.ivanovds.tasks.demo.utils;
+package ru.ivanovds.tasks.demo.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

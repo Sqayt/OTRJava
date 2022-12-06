@@ -25,7 +25,7 @@ public class TaskService {
     public boolean saveTask(TaskDto taskDto) {
         long idPerson = convertToStr(taskDto.getFullNamePerson());
 
-        if (!isValidTaskDto(taskDto)) {
+        if (!isValidTaskDto(taskDto) || taskDto.getPriority() < 0) {
             return false;
         }
 
@@ -68,8 +68,9 @@ public class TaskService {
         try {
             Task taskOld = repository.findById(id);
             if (
-                    (taskOld.getPriority() == maxPriority && taskDto.getPriority() > maxPriority) ||
-                    (taskOld.getPriority() == minPriority && taskDto.getPriority() < minPriority)
+                (taskOld.getPriority() == maxPriority && taskDto.getPriority() > maxPriority) ||
+                (taskOld.getPriority() == minPriority && taskDto.getPriority() < minPriority &&
+                        taskDto.getPriority() < 0)
             ) {
                 taskDto.setPriority(taskOld.getPriority());
             }
