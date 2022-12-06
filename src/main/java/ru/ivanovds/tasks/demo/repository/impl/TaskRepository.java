@@ -9,7 +9,6 @@ import ru.ivanovds.tasks.demo.entity.Tables;
 import ru.ivanovds.tasks.demo.entity.tables.pojos.Task;
 import ru.ivanovds.tasks.demo.repository.CrudRepository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +21,6 @@ public class TaskRepository implements CrudRepository<Task> {
 
     private final DSLContext context;
 
-    @Transactional
     @Override
     public boolean insert(Task task) {
         try {
@@ -41,7 +39,6 @@ public class TaskRepository implements CrudRepository<Task> {
         }
     }
 
-    @Transactional
     @Override
     public boolean update(Long id, Task task) {
         try {
@@ -62,7 +59,6 @@ public class TaskRepository implements CrudRepository<Task> {
         }
     }
 
-    @Transactional
     @Override
     public Task findById(Long id) throws Exception {
         try {
@@ -87,7 +83,6 @@ public class TaskRepository implements CrudRepository<Task> {
                 .fetchInto(Task.class);
     }
 
-    @Transactional
     @Override
     public Boolean delete(Long id) {
         try {
@@ -120,7 +115,6 @@ public class TaskRepository implements CrudRepository<Task> {
     }
 
     //TODO подумать
-    @Transactional
     public String findFullNameById(Long id) throws Exception {
         try {
             var result = context

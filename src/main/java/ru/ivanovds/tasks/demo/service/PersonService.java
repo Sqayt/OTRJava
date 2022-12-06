@@ -7,7 +7,6 @@ import ru.ivanovds.tasks.demo.dto.PersonDto;
 import ru.ivanovds.tasks.demo.entity.tables.pojos.Person;
 import ru.ivanovds.tasks.demo.repository.impl.PersonRepository;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +17,6 @@ import java.util.Objects;
 public class PersonService {
     private final PersonRepository repository;
 
-    @Transactional
     public boolean savePerson(PersonDto personDto) {
         Long directorId = personDto.getDirectorFullName().equals("") ?
                 null : Long.parseLong(personDto.getDirectorFullName());
@@ -35,7 +33,6 @@ public class PersonService {
         return repository.insert(person);
     }
 
-    @Transactional
     public PersonDto getPersonById(Long id) throws Exception {
         Person person = repository.findById(id);
         PersonDto personDto = new PersonDto(person);
@@ -46,7 +43,6 @@ public class PersonService {
         return personDto;
     }
 
-    @Transactional
     public List<PersonDto> getAllPerson() {
         List<Person> people = repository.findAll();
         List<PersonDto> peopleDto = new ArrayList<>(people.size());
@@ -67,7 +63,6 @@ public class PersonService {
         return peopleDto;
     }
 
-    @Transactional
     public boolean updatePersonById(Long id, PersonDto personDto){
         try {
             Long directorId = personDto.getDirectorFullName().equals("") ?
@@ -97,7 +92,6 @@ public class PersonService {
         return repository.deleteAll();
     }
 
-    @Transactional
     public boolean deletePersonById(Long id) {
         int countTask = Integer.parseInt(repository.countTaskByPersonId(id));
         int countPerson = Integer.parseInt(repository.countPersonByPersonId(id));

@@ -7,7 +7,6 @@ import ru.ivanovds.tasks.demo.dto.TaskDto;
 import ru.ivanovds.tasks.demo.entity.tables.pojos.Task;
 import ru.ivanovds.tasks.demo.repository.impl.TaskRepository;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +87,6 @@ public class TaskService {
         return repository.deleteAll();
     }
 
-    @Transactional
     public boolean deleteTaskById(Long id) {
         return repository.delete(id);
     }
