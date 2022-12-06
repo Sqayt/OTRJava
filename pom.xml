@@ -17,6 +17,7 @@
 		<java.version>11</java.version>
 		<lombok.version>1.18.24</lombok.version>
 		<jooq.version>3.17.5</jooq.version>
+		<hikaricp.version>5.0.1</hikaricp.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -47,11 +48,12 @@
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
 		</dependency>
-
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jooq</artifactId>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikaricp.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.jooq</groupId>
 			<artifactId>jooq</artifactId>

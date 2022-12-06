@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.ivanovds.tasks.demo.entity.tables.pojos.Person;
+import ru.ivanovds.tasks.demo.dto.PersonDto;
 import ru.ivanovds.tasks.demo.service.PersonService;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class PersonController {
     private final PersonService personService;
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> savePerson(@RequestBody Person person) {
+    public ResponseEntity<HttpStatus> savePerson(@RequestBody PersonDto person) {
         if (personService.savePerson(person)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -30,12 +30,12 @@ public class PersonController {
     @GetMapping()
     public ResponseEntity<?> getAllPerson() {
         try {
-            List<Person> people = personService.getAllPerson();
+            List<PersonDto> people = personService.getAllPerson();
 
             if (people != null) {
                 return new ResponseEntity<>(people, HttpStatus.OK);
             } else  {
-                throw new Exception("Список пустой");
+                throw new Exception("Список is null");
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -47,7 +47,7 @@ public class PersonController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getPersonById(@PathVariable Long id) {
         try {
-            Person person = personService.getPersonById(id);
+            PersonDto person = personService.getPersonById(id);
 
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (Exception e) {
@@ -68,7 +68,7 @@ public class PersonController {
 
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> updatePersonById(@PathVariable Long id,
-                                                       @RequestBody Person person) {
+                                                       @RequestBody PersonDto person) {
         if (personService.updatePersonById(id, person)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {

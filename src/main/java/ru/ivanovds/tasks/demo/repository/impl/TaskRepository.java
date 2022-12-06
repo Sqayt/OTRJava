@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Repository;
-import ru.ivanovds.tasks.demo.dto.TaskDto;
 import ru.ivanovds.tasks.demo.entity.Tables;
 import ru.ivanovds.tasks.demo.entity.tables.pojos.Task;
 import ru.ivanovds.tasks.demo.repository.CrudRepository;
@@ -151,16 +150,6 @@ public class TaskRepository implements CrudRepository<Task> {
 
             throw new Exception("Ошибка в сервисе");
         }
-    }
-
-    public String countTaskByPersonId(Long id) {
-        return Objects.requireNonNull(context
-                        .select(count())
-                        .from(Tables.TASK)
-                        .where(Tables.TASK.PERSON_ID.eq(id))
-                        .fetchAny())
-                .into(String.class);
-
     }
 
     public Integer getMaxPriority() {

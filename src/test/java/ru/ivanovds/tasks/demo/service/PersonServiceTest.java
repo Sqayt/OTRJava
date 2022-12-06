@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.ivanovds.tasks.demo.entity.tables.pojos.Person;
+import ru.ivanovds.tasks.demo.dto.PersonDto;
 
 import java.util.List;
 
@@ -18,13 +18,13 @@ public class PersonServiceTest {
 
     @Test
     public void savePersonTest() {
-        Person person = new Person(
-                1L, "Начальник", "Юрий", "Мерзляков",
-                "Владимирович", "Лукойл", null
+        PersonDto person = new PersonDto(
+                null, "Юрий", "Мерзляков",
+                "Владимирович","Начальник", "Лукойл", null
         );
         personService.savePerson(person);
 
-        List<Person> people = personService.getAllPerson();
+        List<PersonDto> people = personService.getAllPerson();
         int size = people.size();
 
         Assertions.assertNotEquals(size, 0);
@@ -32,14 +32,14 @@ public class PersonServiceTest {
 
     @Test
     public void savePersonWithoutIdTest() {
-        Person person = new Person(
+        PersonDto person = new PersonDto(
                 null, "Шеф", "Владимир", "Сергеевич",
                 "Семенюк", "Twitch", null
         );
 
         personService.savePerson(person);
 
-        List<Person> people = personService.getAllPerson();
+        List<PersonDto> people = personService.getAllPerson();
         int size = people.size();
         log.info(String.valueOf(size));
 
@@ -48,40 +48,40 @@ public class PersonServiceTest {
 
     @Test
     public void getPersonByIdTest() throws Exception {
-        List<Person> people = personService.getAllPerson();
+        List<PersonDto> people = personService.getAllPerson();
         int size = people.size();
         Long id = people.get(size - 1).getId();
 
-        Person person = personService.getPersonById(id);
+        PersonDto person = personService.getPersonById(id);
 
         Assertions.assertEquals(person.getName(), people.get(size - 1).getName());
     }
 
     @Test
     public void updatePersonByIdTest() {
-        Person person = new Person(
+        PersonDto person = new PersonDto(
                 null, "Директор", "Максим", "Иванов",
-                "Владимирович", "ОАО", 1L
+                "Владимирович", "ОАО", "1"
         );
-        List<Person> people = personService.getAllPerson();
+        List<PersonDto> people = personService.getAllPerson();
         Long id = people.get(people.size() - 1).getId();
 
         personService.updatePersonById(id, person);
 
-        List<Person> personList = personService.getAllPerson();
+        List<PersonDto> personList = personService.getAllPerson();
 
         Assertions.assertEquals(person.getName(), personList.get(personList.size() - 1).getName());
     }
 
     @Test
     public void deletePersonByIdTest() {
-        List<Person> people = personService.getAllPerson();
+        List<PersonDto> people = personService.getAllPerson();
         int size = people.size();
         Long id = people.get(size - 1).getId();
 
         personService.deletePersonById(id);
 
-        List<Person> personList = personService.getAllPerson();
+        List<PersonDto> personList = personService.getAllPerson();
         int sizeNew = personList.size();
 
         Assertions.assertNotEquals(size, sizeNew);
@@ -91,7 +91,7 @@ public class PersonServiceTest {
     public void delAllPersonTest() {
         if (personService.delAllPerson()) {
 
-            List<Person> people = personService.getAllPerson();
+            List<PersonDto> people = personService.getAllPerson();
 
             Assertions.assertEquals(people.size(), 0);
         }

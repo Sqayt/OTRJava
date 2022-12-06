@@ -2,19 +2,14 @@ package ru.ivanovds.tasks.demo.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.DSLContext;
-import org.jooq.exception.DataAccessException;
 import org.springframework.stereotype.Service;
 import ru.ivanovds.tasks.demo.dto.TaskDto;
-import ru.ivanovds.tasks.demo.entity.Tables;
 import ru.ivanovds.tasks.demo.entity.tables.pojos.Task;
 import ru.ivanovds.tasks.demo.repository.impl.TaskRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,36 +24,63 @@ public class TaskService {
     }
 
     public boolean saveTask(TaskDto taskDto) {
-        Task task = new Task(null, taskDto.getPriority(), taskDto.getDescription(), taskDto.getPersonId());
+        long idPerson = convertToStr(taskDto.getFullNamePerson());
+
+        if (!isValidTaskDto(taskDto)) {
+            return false;
+        }
+
+        Task task = new Task(null, taskDto.getPriority(), taskDto.getDescription(), idPerson);
+
         return repository.insert(task);
     }
 
     public List<TaskDto> getAllTask() {
         List<Task> tasks = repository.findAll();
-        List<TaskDto> taskDtos = new ArrayList<>(tasks.size());
+        List<TaskDto> tasksDto = new ArrayList<>(tasks.size());
 
         tasks.forEach(
                 it -> {
                     TaskDto taskDto = new TaskDto(it);
+                    long id = convertToStr(taskDto.getFullNamePerson());
 
-                    String fullName = "";
+                    String fullName;
 
                     try {
-                         fullName = repository.findFullNameById(taskDto.getPersonId());
+                         fullName = repository.findFullNameById(id);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                     taskDto.setFullNamePerson(fullName);
 
-                    taskDtos.add(taskDto);
+                    tasksDto.add(taskDto);
                 }
         );
 
-        return taskDtos;
+        return tasksDto;
     }
 
     public boolean updateTaskById(Long id, TaskDto taskDto) {
-        Task task = new Task(id, taskDto.getPriority(), taskDto.getDescription(), taskDto.getPersonId());
+        long idPerson = convertToStr(taskDto.getFullNamePerson());
+
+        long maxPriority = getMaxPriority();
+        long minPriority = getMinPriority();
+
+        try {
+            Task taskOld = repository.findById(id);
+            if (
+                    (taskOld.getPriority() == maxPriority && taskDto.getPriority() > maxPriority) ||
+                    (taskOld.getPriority() == minPriority && taskDto.getPriority() < minPriority)
+            ) {
+                taskDto.setPriority(taskOld.getPriority());
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            return false;
+        }
+
+        Task task = new Task(id, taskDto.getPriority(), taskDto.getDescription(), idPerson);
         return repository.update(id, task);
     }
 
@@ -71,19 +93,27 @@ public class TaskService {
         return repository.delete(id);
     }
 
-    public String findFullNameById(Long id) throws Exception {
-        return repository.findFullNameById(id);
+    private boolean isValidTaskDto(TaskDto taskDto) {
+        return  !taskDto.getDescription().isEmpty() && !taskDto.getDescription().equals("");
     }
 
-    public String countTaskByPersonId(Long id) {
-        return repository.countTaskByPersonId(id);
+    private Long convertToStr(String fullNamePerson) {
+        long id;
+
+        if (fullNamePerson == null || fullNamePerson.isEmpty()) {
+            id = 0L;
+        } else {
+            id = Long.parseLong(fullNamePerson);
+        }
+
+        return id;
     }
 
-    public Integer getMaxPriority() {
+    private Integer getMaxPriority() {
         return repository.getMaxPriority();
     }
 
-    public Integer getMinPriority() {
+    private Integer getMinPriority() {
         return repository.getMinPriority();
     }
 }

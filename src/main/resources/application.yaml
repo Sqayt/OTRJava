@@ -20,10 +20,3 @@ spring:
         hbm2ddl:
           auto: none
         default_schema: public
-
-logging:
-  level:
-    org:
-      hibernate:
-        type: TRACE
-        SQL: INFO
