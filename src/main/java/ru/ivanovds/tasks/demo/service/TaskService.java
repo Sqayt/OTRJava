@@ -97,15 +97,20 @@ public class TaskService {
     }
 
     private Long convertToStr(String fullNamePerson) {
-        long id;
+        try {
+            long id;
 
-        if (fullNamePerson == null || fullNamePerson.isEmpty()) {
-            id = 0L;
-        } else {
-            id = Long.parseLong(fullNamePerson);
+            if (fullNamePerson == null || fullNamePerson.isEmpty()) {
+                id = 0L;
+            } else {
+                id = Long.parseLong(fullNamePerson);
+            }
+
+            return id;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return 0L;
         }
-
-        return id;
     }
 
     private Integer getMaxPriority() {
