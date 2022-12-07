@@ -69,8 +69,8 @@ public class TaskService {
             Task taskOld = repository.findById(id);
             if (
                 (taskOld.getPriority() == maxPriority && taskDto.getPriority() > maxPriority) ||
-                (taskOld.getPriority() == minPriority && taskDto.getPriority() < minPriority &&
-                        taskDto.getPriority() < 0)
+                (taskOld.getPriority() == minPriority && (taskDto.getPriority() < minPriority ||
+                        taskDto.getPriority() < 0))
             ) {
                 taskDto.setPriority(taskOld.getPriority());
             }
