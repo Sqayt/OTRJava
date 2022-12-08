@@ -74,17 +74,4 @@ public class TaskServiceTest {
 
         Assertions.assertEquals(0, tasks.size());
     }
-    @Test
-    public void getMaxPriorityTest() {
-//        Integer max = taskService.getMaxPriority();
-//
-//        Assertions.assertEquals(229, max);
-    }
-
-    @Test
-    public void getMinPriorityTest() {
-//        Integer min = taskService.getMinPriority();
-//
-//        Assertions.assertEquals(2, min);
-    }
 }
