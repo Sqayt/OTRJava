@@ -21,7 +21,7 @@ public class PersonService {
         Long directorId = personDto.getDirectorFullName().equals("") ?
                 null : Long.parseLong(personDto.getDirectorFullName());
 
-        if (isNotValidPersonDto(personDto) || Objects.equals(directorId, personDto.getId())) {
+        if (isNotValidPersonDto(personDto) || (directorId != null && Objects.equals(directorId, personDto.getId()))) {
             return false;
         }
 

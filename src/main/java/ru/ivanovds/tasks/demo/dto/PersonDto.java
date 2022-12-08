@@ -6,7 +6,7 @@ import ru.ivanovds.tasks.demo.entity.tables.pojos.Person;
 @Data
 public class PersonDto {
 
-    private Long id;
+    private Long id = 1L;
     private String name;
     private String middleName;
     private String surName;
