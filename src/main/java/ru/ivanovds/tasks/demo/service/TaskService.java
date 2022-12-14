@@ -93,7 +93,11 @@ public class TaskService {
     }
 
     private boolean isValidTaskDto(TaskDto taskDto) {
-        return  !taskDto.getDescription().isEmpty() && !taskDto.getDescription().equals("");
+        if (taskDto != null) {
+            return !taskDto.getDescription().isEmpty();
+        } else  {
+            return false;
+        }
     }
 
     private Long convertToStr(String fullNamePerson) {

@@ -20,11 +20,9 @@ public class PersonController {
 
     @PostMapping()
     public ResponseEntity<HttpStatus> savePerson(@RequestBody PersonDto person) {
-        if (personService.savePerson(person)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        return personService.savePerson(person) ?
+                new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @GetMapping()
@@ -59,20 +57,16 @@ public class PersonController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deletePersonById(@PathVariable Long id) {
-        if (personService.deletePersonById(id)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return personService.deletePersonById(id) ?
+                new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> updatePersonById(@PathVariable Long id,
                                                        @RequestBody PersonDto person) {
-        if (personService.updatePersonById(id, person)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return personService.updatePersonById(id, person) ?
+                new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
     }
 }

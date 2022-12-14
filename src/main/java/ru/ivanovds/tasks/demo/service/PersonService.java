@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.ivanovds.tasks.demo.dto.PersonDto;
 import ru.ivanovds.tasks.demo.entity.tables.pojos.Person;
+import ru.ivanovds.tasks.demo.entity.tables.pojos.Task;
 import ru.ivanovds.tasks.demo.repository.impl.PersonRepository;
+import ru.ivanovds.tasks.demo.repository.impl.TaskRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Objects;
 @Slf4j
 public class PersonService {
     private final PersonRepository repository;
+    private final TaskRepository taskRepository;
 
     public boolean savePerson(PersonDto personDto) {
         Long directorId = personDto.getDirectorFullName().equals("") ?
@@ -46,13 +49,22 @@ public class PersonService {
     public List<PersonDto> getAllPerson() {
         List<Person> people = repository.findAll();
         List<PersonDto> peopleDto = new ArrayList<>(people.size());
+        List<Task> tasks = taskRepository.findAll();
 
         people.forEach(it -> {
             try {
                 PersonDto personDto = new PersonDto(it);
 
                 personDto.setDirectorFullName(repository.findFullNameById(it.getFkDirectorPersonId()));
-                personDto.setCountTask(repository.countTaskByPersonId(it.getId()));
+
+                people.forEach(
+                        el -> {
+                            if (el.getId().equals(it.getFkDirectorPersonId())) {
+                                personDto.setDirectorFullName(el.getSurName() + " " + el.getName() + " "
+                                        + el.getMiddleName());
+                            }
+                        }
+                );
 
                 peopleDto.add(personDto);
             } catch (Exception e) {
@@ -104,10 +116,11 @@ public class PersonService {
     }
 
     private boolean isNotValidPersonDto(PersonDto personDto) {
-        return personDto.getPost().isEmpty() || personDto.getPost().equals("") || personDto.getPost() == null ||
-                personDto.getName().isEmpty() || personDto.getName().equals("") || personDto.getName() == null ||
-                personDto.getSurName().isEmpty() || personDto.getSurName().equals("") || personDto.getSurName() == null ||
-                personDto.getMiddleName().isEmpty() || personDto.getMiddleName().equals("") || personDto.getMiddleName() == null ||
-                personDto.getBranchName().isEmpty() || personDto.getBranchName().equals("") || personDto.getBranchName() == null;
+        return  personDto == null                 ||
+                personDto.getPost() == null       || personDto.getPost().isEmpty()       ||
+                personDto.getName() == null       || personDto.getName().isEmpty()       ||
+                personDto.getSurName() == null    || personDto.getSurName().isEmpty()    ||
+                personDto.getMiddleName() == null || personDto.getMiddleName().isEmpty() ||
+                personDto.getBranchName() == null || personDto.getBranchName().isEmpty();
     }
 }

@@ -26,10 +26,8 @@ public class TaskController {
 
             return new ResponseEntity<>(taskDto, HttpStatus.OK);
         } catch (Exception e) {
-
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
 
     @GetMapping()
@@ -45,38 +43,30 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<HttpStatus> saveTask(@RequestBody TaskDto task) {
-        if (service.saveTask(task)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-        }
+        return service.saveTask(task) ?
+                new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
     }
 
     @DeleteMapping("/{idTask}")
     public ResponseEntity<HttpStatus> deleteTaskById(@PathVariable Long idTask) {
-        if (service.deleteTaskById(idTask)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        return service.deleteTaskById(idTask) ?
+                new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> updateTaskById(@PathVariable Long id,
                                             @RequestBody TaskDto taskDto) {
-        if (service.updateTaskById(id, taskDto)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return service.updateTaskById(id, taskDto) ?
+                new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
     }
 
     @DeleteMapping()
     public ResponseEntity<HttpStatus> deleteAllTask() {
-        if (service.delAllTask()) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else  {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        return service.delAllTask() ?
+                new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 }
