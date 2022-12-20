@@ -5,9 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.ivanovds.tasks.demo.dto.PersonDto;
 import ru.ivanovds.tasks.demo.entity.tables.pojos.Person;
-import ru.ivanovds.tasks.demo.entity.tables.pojos.Task;
+import ru.ivanovds.tasks.demo.handler.PersonException;
 import ru.ivanovds.tasks.demo.repository.impl.PersonRepository;
-import ru.ivanovds.tasks.demo.repository.impl.TaskRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.Objects;
 @Slf4j
 public class PersonService {
     private final PersonRepository repository;
-    private final TaskRepository taskRepository;
 
     public boolean savePerson(PersonDto personDto) {
         Long directorId = personDto.getDirectorFullName().equals("") ?
@@ -49,27 +47,28 @@ public class PersonService {
     public List<PersonDto> getAllPerson() {
         List<Person> people = repository.findAll();
         List<PersonDto> peopleDto = new ArrayList<>(people.size());
-        List<Task> tasks = taskRepository.findAll();
 
         people.forEach(it -> {
-            try {
-                PersonDto personDto = new PersonDto(it);
+            PersonDto personDto = new PersonDto(it);
 
-                personDto.setDirectorFullName(repository.findFullNameById(it.getFkDirectorPersonId()));
+            people.forEach(
+                el -> {
+                    try {
+                        if (el.getId().equals(it.getFkDirectorPersonId())) {
 
-                people.forEach(
-                        el -> {
-                            if (el.getId().equals(it.getFkDirectorPersonId())) {
-                                personDto.setDirectorFullName(el.getSurName() + " " + el.getName() + " "
-                                        + el.getMiddleName());
+                            if (el.getSurName().isEmpty() || el.getName().isEmpty() || el.getMiddleName().isEmpty()) {
+                                throw new PersonException("Fatal exception in db 'people'");
                             }
-                        }
-                );
 
-                peopleDto.add(personDto);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+                            personDto.setDirectorFullName(el.getSurName() + " " + el.getName() + " "
+                                    + el.getMiddleName());
+                        }
+                    } catch (PersonException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+            peopleDto.add(personDto);
         });
 
         return peopleDto;
