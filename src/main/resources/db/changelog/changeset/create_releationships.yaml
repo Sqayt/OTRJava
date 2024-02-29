@@ -2,7 +2,6 @@ databaseChangeLog:
   - changeSet:
       id: create-relationships-jooq
       author: SqGoliaf
-      ignore: true
       changes:
         - addUniqueConstraint:
             columnNames: id

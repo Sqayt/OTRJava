@@ -20,7 +20,7 @@ public class DbConnectionPool {
             config.setDriverClassName("org.postgresql.Driver");
             config.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres");
             config.setUsername("postgres");
-            config.setPassword("admin");
+            config.setPassword("PandoraSQ123");
             config.addDataSourceProperty("cachePrepStmts", "true");
             config.addDataSourceProperty("prepStmtCacheSize", "250");
             config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");

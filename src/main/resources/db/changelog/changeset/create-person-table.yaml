@@ -2,7 +2,6 @@ databaseChangeLog:
   - changeSet:
       id: create-person-jooq
       author: SqGoliaf
-      ignore: true
       changes:
         - createTable:
             columns:

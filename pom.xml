@@ -15,7 +15,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
-		<lombok.version>1.18.24</lombok.version>
+		<lombok.version>1.18.30</lombok.version>
 		<jooq.version>3.17.5</jooq.version>
 		<hikaricp.version>5.0.1</hikaricp.version>
 		<swagger.version>3.0.0</swagger.version>
@@ -90,7 +90,7 @@
 								<driver>org.postgresql.Driver</driver>
 								<url>jdbc:postgresql://localhost:5432/postgres</url>
 								<username>postgres</username>
-								<password>admin</password>
+								<password>PandoraSQ123</password>
 							</jdbc>
 							<generator>
 								<database>
@@ -119,6 +119,24 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>4.4.3</version>
+				<configuration>
+					<changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
+					<url> jdbc:postgresql://localhost:5432/postgres</url>
+					<username>postgres</username>
+					<password>PandoraSQ123</password>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.postgresql</groupId>
+						<artifactId>postgresql</artifactId>
+						<version>42.3.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
