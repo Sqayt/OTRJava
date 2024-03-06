@@ -25,6 +25,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-security</artifactId>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
@@ -38,6 +47,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 
 		<dependency>
@@ -74,52 +88,52 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.jooq</groupId>
-				<artifactId>jooq-codegen-maven</artifactId>
-				<version>${jooq.version}</version>
-				<executions>
-					<execution>
-						<id>generate-postgre</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<jdbc>
-								<driver>org.postgresql.Driver</driver>
-								<url>jdbc:postgresql://localhost:5432/postgres</url>
-								<username>postgres</username>
-								<password>PandoraSQ123</password>
-							</jdbc>
-							<generator>
-								<database>
-									<name>org.jooq.meta.postgres.PostgresDatabase</name>
-									<includes>.*</includes>
-									<excludes />
-									<inputSchema>public</inputSchema>
-								</database>
-								<generate>
-									<pojos>true</pojos>
-									<pojosEqualsAndHashCode>
-										true
-									</pojosEqualsAndHashCode>
-									<javaTimeTypes>true</javaTimeTypes>
-									<fluentSetters>true</fluentSetters>
-								</generate>
-								<target>
-									<packageName>
-										ru.ivanovds.tasks.demo.entity
-									</packageName>
-									<directory>
-										target/generated-sources/jooq
-									</directory>
-								</target>
-							</generator>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.jooq</groupId>-->
+<!--				<artifactId>jooq-codegen-maven</artifactId>-->
+<!--				<version>${jooq.version}</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>generate-postgre</id>-->
+<!--						<phase>generate-sources</phase>-->
+<!--						<goals>-->
+<!--							<goal>generate</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<jdbc>-->
+<!--								<driver>org.postgresql.Driver</driver>-->
+<!--								<url>jdbc:postgresql://localhost:5432/postgres</url>-->
+<!--								<username>postgres</username>-->
+<!--								<password>PandoraSQ123</password>-->
+<!--							</jdbc>-->
+<!--							<generator>-->
+<!--								<database>-->
+<!--									<name>org.jooq.meta.postgres.PostgresDatabase</name>-->
+<!--									<includes>.*</includes>-->
+<!--									<excludes />-->
+<!--									<inputSchema>public</inputSchema>-->
+<!--								</database>-->
+<!--								<generate>-->
+<!--									<pojos>true</pojos>-->
+<!--									<pojosEqualsAndHashCode>-->
+<!--										true-->
+<!--									</pojosEqualsAndHashCode>-->
+<!--									<javaTimeTypes>true</javaTimeTypes>-->
+<!--									<fluentSetters>true</fluentSetters>-->
+<!--								</generate>-->
+<!--								<target>-->
+<!--									<packageName>-->
+<!--										ru.ivanovds.tasks.demo.entity-->
+<!--									</packageName>-->
+<!--									<directory>-->
+<!--										target/generated-sources/jooq-->
+<!--									</directory>-->
+<!--								</target>-->
+<!--							</generator>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 			<plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>

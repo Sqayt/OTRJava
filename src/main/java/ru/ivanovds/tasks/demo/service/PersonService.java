@@ -55,14 +55,13 @@ public class PersonService {
                 el -> {
                     try {
                         if (el.getId().equals(it.getFkDirectorPersonId())) {
-
                             if (el.getSurName().isEmpty() || el.getName().isEmpty() || el.getMiddleName().isEmpty()) {
                                 throw new PersonException("Fatal exception in db 'people'");
                             }
-
                             personDto.setDirectorFullName(el.getSurName() + " " + el.getName() + " "
                                     + el.getMiddleName());
                         }
+                        personDto.setCountTask(repository.countTaskByPersonId(el.getId()));
                     } catch (PersonException e) {
                         throw new RuntimeException(e);
                     }

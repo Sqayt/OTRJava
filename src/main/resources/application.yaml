@@ -5,7 +5,7 @@ server:
 
 spring:
   liquibase:
-    enabled: true
+    enabled: false
     liquibase-schema: public
     change-log: classpath:db/changelog/db.changelog-master.yaml
   datasource:
@@ -21,11 +21,17 @@ spring:
         hbm2ddl:
           auto: none
         default_schema: public
+  security:
+    user:
+      name: admin
+      password: admin
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8083/auth/realms/sqgolliaf
+          jwk-set-uri: http://localhost:8083/auth/realms/sqgolliaf/protocol/openid-connect/certs
 
-springdoc:
-  api-docs:
-    path: /api-docs
-    enabled: true
-  swagger-ui:
-    path: /api-swagger
-    enabled: true
+springfox:
+  documentation:
+    swagger-ui:
+      base-url: /swagger-ui
